@@ -5,4 +5,5 @@ package com.example.moham.magicdrafter.Model;
  */
 
 public class Card {
+    //this is updated
 }
