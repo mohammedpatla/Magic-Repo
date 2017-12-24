@@ -5,5 +5,5 @@ package com.example.moham.magicdrafter.Model;
  */
 
 public class Card {
-    // you suck
+    // 
 }

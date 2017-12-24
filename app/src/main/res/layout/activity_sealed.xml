@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.moham.magicdrafter.SealedActivity">
+
+    <GridView
+        android:id="@+id/grd_card_view"
+        android:layout_width="368dp"
+        android:layout_height="435dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/btn_color_sort"
+        android:layout_width="wrap_content"
+        android:layout_height="33dp"
+        android:layout_marginTop="40dp"
+        android:text="@string/color"
+        android:textAppearance="@android:style/TextAppearance.Holo.Small"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btn_cost_sort"
+        android:layout_width="wrap_content"
+        android:layout_height="33dp"
+        android:text="@string/cost"
+        android:textAppearance="@android:style/TextAppearance.Holo.Small"
+        app:layout_constraintStart_toEndOf="@+id/btn_color_sort"
+        app:layout_constraintTop_toTopOf="@+id/btn_color_sort" />
+
+    <Button
+        android:id="@+id/btn_type_sort"
+        android:layout_width="wrap_content"
+        android:layout_height="33dp"
+        android:text="@string/type"
+        android:textAppearance="@android:style/TextAppearance.Holo.Small"
+        app:layout_constraintStart_toEndOf="@+id/btn_cost_sort"
+        app:layout_constraintTop_toTopOf="@+id/btn_cost_sort" />
+
+    <Button
+        android:id="@+id/btn_cards_in_deck"
+        android:layout_width="55dp"
+        android:layout_height="35dp"
+        android:text="@string/_0_0"
+        android:textAppearance="@android:style/TextAppearance.Holo.Small"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btn_add_basics"
+        android:layout_width="wrap_content"
+        android:layout_height="33dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/add_basic_lands"
+        android:textAppearance="@android:style/TextAppearance.Holo.Small"
+        app:layout_constraintEnd_toEndOf="@+id/btn_cards_in_deck"
+        app:layout_constraintTop_toBottomOf="@+id/btn_cards_in_deck" />
+</android.support.constraint.ConstraintLayout>
