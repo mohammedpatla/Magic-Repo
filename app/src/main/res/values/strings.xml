@@ -3,6 +3,6 @@
     <string name="color">Color</string>
     <string name="cost">Cost</string>
     <string name="type">Type</string>
-    <string name="_0_0">0/0</string>
+    <string name="deck_numbers">0/40</string>
     <string name="add_basic_lands">Add Basic Lands</string>
 </resources>
