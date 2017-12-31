@@ -1,10 +1,12 @@
 package com.example.moham.magicdrafter.Model;
 
+import java.util.Comparator;
+
 /**
  * Magic Drafter - CardDatabase.java
  * Created by Brigham Moll.
  * Created on 12/25/2017.
- * Last Revised on 12/25/2017.
+ * Last Revised on 12/31/2017.
  * Description: This class is used to represent a single card that has been drawn from a pack.
  * Information stored in the Card includes cost, color, rarity, collector's number (id), and type.
  * This information is used to generate random card packs for sealed/draft simulators. Information is also used to sort cards in user's view.

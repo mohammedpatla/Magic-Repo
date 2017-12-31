@@ -54,7 +54,7 @@
 
     <Button
         android:id="@+id/btn_cards_in_deck"
-        android:layout_width="55dp"
+        android:layout_width="wrap_content"
         android:layout_height="35dp"
         android:text="@string/deck_numbers"
         android:textAppearance="@android:style/TextAppearance.Holo.Small"
