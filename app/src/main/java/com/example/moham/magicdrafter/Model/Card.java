@@ -1,6 +1,7 @@
 package com.example.moham.magicdrafter.Model;
 
-import java.util.Comparator;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 /**
  * Magic Drafter - CardDatabase.java
@@ -13,7 +14,7 @@ import java.util.Comparator;
  * Also stores whether the card is foil. (Assigned after drawn from pack, if user is lucky.)
  */
 
-public class Card
+public class Card implements Parcelable
 {
     // Card information field variables.
     // Collector's number of the card. (Displayed at the bottom of the card.) Primary key of database and used for sorting.
@@ -29,6 +30,10 @@ public class Card
     private char color;
     // Whether the card is foil or not.
     private boolean foil;
+
+    // Basic Land type constants for making basic lands.
+    public static final char LANDRARITYCOLOR = 'C';
+    public static final char LANDTYPE = 'L';
 
     // Initializes passed in card from the original full set pool.
     public Card (int id, int cost, char rarity, char type, char color)
@@ -46,11 +51,30 @@ public class Card
     {
         id = 0;
         cost = -1;
-        rarity = ' ';
-        type = ' ';
-        color = ' ';
+        rarity = type = color = ' ';
         foil = false;
 
+    }
+
+    // Creating a Card via a Parcel. (Used for moving card lists around to different activities.
+    public Card(Parcel in)
+    {
+        id = in.readInt();
+        cost = in.readInt();
+        rarity = in.readString().charAt(0);
+        type = in.readString().charAt(0);
+        color = in.readString().charAt(0);
+        foil = in.readByte() != 0;
+    }
+
+    // Creating a basic land Card.
+    public Card(int basicLandType)
+    {
+        id = basicLandType;
+        cost = 0;
+        rarity = color = LANDRARITYCOLOR;
+        type = LANDTYPE;
+        foil = false;
     }
 
     // Getters and setters.
@@ -104,5 +128,41 @@ public class Card
     public void setFoilToTrue()
     {
         foil = true;
+    }
+
+    // Used for Parcelable in order to move Card lists around the app.
+    public static final Creator<Card> CREATOR = new Creator<Card>()
+    {
+        @Override
+        public Card createFromParcel(Parcel in)
+        {
+            return new Card(in);
+        }
+
+        @Override
+        public Card[] newArray(int size)
+        {
+            return new Card[size];
+        }
+    };
+
+    @Override
+    public int describeContents()
+    {
+        // Leave as default.
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags)
+    {
+        // Called by runtime when writing to Parcel. Puts a Card into a Parcel.
+        // Order is important.
+        dest.writeInt(id);
+        dest.writeInt(cost);
+        dest.writeString(Character.toString(rarity));
+        dest.writeString(Character.toString(type));
+        dest.writeString(Character.toString(color));
+        dest.writeByte((byte)(foil ? 1: 0));
     }
 }

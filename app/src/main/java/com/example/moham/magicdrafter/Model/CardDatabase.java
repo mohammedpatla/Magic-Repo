@@ -70,6 +70,9 @@ public class CardDatabase
             cardsPool.add(new Card(id, cost, rarity, type, color));
         }
 
+        // Close database in CardDataBaseHelper.
+        openHelper.close();
+
         // Close cursor and database.
         result.close();
         database.close();

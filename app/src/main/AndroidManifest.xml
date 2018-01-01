@@ -16,7 +16,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SealedActivity"></activity>
+        <activity android:name=".SealedActivity" />
+        <activity android:name=".AddBasicsActivity"/>
     </application>
 
 </manifest>

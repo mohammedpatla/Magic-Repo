@@ -21,6 +21,7 @@ import java.util.Arrays;
  * Last Revised on 12/26/2017.
  * Description: This special version of the SQLiteOpenHelper will use the built-in database
  * from the assets folder of the app.
+ * Created after reading this guide: https://blog.reigndesign.com/blog/using-your-own-sqlite-database-in-android-applications/
  */
 
 public class CardDataBaseHelper extends SQLiteOpenHelper
@@ -48,52 +49,52 @@ public class CardDataBaseHelper extends SQLiteOpenHelper
     }
 
     // Stores context in order to access the database in the assets folder.
-        public CardDataBaseHelper(Context context)
+    public CardDataBaseHelper(Context context)
+    {
+        super(context, DB_NAME, null, 1);
+        this.appContext = context;
+    }
+
+    // This method will create a database and then fill it with the values from the built-in database file.
+    public void generateAppDatabase()
+    {
+        // Before creating database, check if it exists already in the app.
+        SQLiteDatabase cardDatabase = null;
+
+        try
         {
-            super(context, DB_NAME, null, 1);
-            this.appContext = context;
+            String databasePath = DB_PATH + DB_NAME;
+            cardDatabase = SQLiteDatabase.openDatabase(databasePath,null, SQLiteDatabase.OPEN_READONLY);
+        }
+        catch(SQLiteException e)
+        {
+            // The database file within the app does not exist -- Therefore, one needs to be created with the
+            // database file from the app assets folder. Allow the program to continue executing.
         }
 
-        // This method will create a database and then fill it with the values from the built-in database file.
-        public void generateAppDatabase()
+        if(cardDatabase != null)
         {
-            // Before creating database, check if it exists already in the app.
-            SQLiteDatabase cardDatabase = null;
+            // Close up the database. There is already one available.
+            cardDatabase.close();
+        }
+        else
+        {
+            // No database available yet. Create empty one and add information from pre-made database to it.
+
+            // Creates empty database.
+            this.getReadableDatabase();
 
             try
             {
-                String databasePath = DB_PATH + DB_NAME;
-                cardDatabase = SQLiteDatabase.openDatabase(databasePath,null, SQLiteDatabase.OPEN_READONLY);
+                copyInfoIntoDatabase();
             }
-            catch(SQLiteException e)
+            catch(Exception e)
             {
-                // The database file within the app does not exist -- Therefore, one needs to be created with the
-                // database file from the app assets folder. Allow the program to continue executing.
-            }
-
-            if(cardDatabase != null)
-            {
-                // Close up the database. There is already one available.
-                cardDatabase.close();
-            }
-            else
-            {
-                // No database available yet. Create empty one and add information from pre-made database to it.
-
-                // Creates empty database.
-                this.getReadableDatabase();
-
-                try
-                {
-                    copyInfoIntoDatabase();
-                }
-                catch(Exception e)
-                {
-                    // Error while copying database.
-                    Log.e("DB Copy Error", "Error while copying database.");
-                }
+                // Error while copying database.
+                Log.e("DB Copy Error", "Error while copying database.");
             }
         }
+    }
 
         // This method actually copies pre-made information into the empty database.
         private void copyInfoIntoDatabase()

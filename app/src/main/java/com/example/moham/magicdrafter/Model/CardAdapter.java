@@ -1,6 +1,9 @@
 package com.example.moham.magicdrafter.Model;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -76,6 +79,10 @@ public class CardAdapter extends BaseAdapter
         {
             cardView = (ImageView) convertView;
         }
+
+        // Loading full-size Bitmaps takes up an abundance of memory, leading to OOM.
+        // Calculate and use smaller resolution versions of images.
+
 
         // Find the card in the list of opened cards that correlates with the specific card being displayed, and use it's id to find its file name in the resources.
         String cardImageFileName = "ixa" + openedCardPool.get(position).getId();
