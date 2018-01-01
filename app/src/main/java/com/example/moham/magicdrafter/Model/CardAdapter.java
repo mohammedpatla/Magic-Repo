@@ -16,7 +16,7 @@ import java.util.ArrayList;
  * Title of Project - Title of Script
  * Created by Brigham Moll.
  * Created on 12/26/2017.
- * Last Revised on 12/26/2017.
+ * Last Revised on 1/1/2018.
  * Description: This class extends BaseAdapter. It is used to display cards from a pool of cards on the screen
  * as GridView items. Each item has a picture of the card that has been drawn from a pack. Cards can be selected
  * for a deck, or removed from one, when the user taps on an item. If they press down and hold on the item,
@@ -30,6 +30,9 @@ public class CardAdapter extends BaseAdapter
     private static final int ITEM_HEIGHT = 320;
     // Width of a card is about 67% of its height.
     private static final int ITEM_WIDTH = (int)(0.67*ITEM_HEIGHT);
+
+    // Use this to find image files in the Ixalan set of low resolution.
+    private static final String IXALAN_LOW_RES_IMAGES = "ixa";
 
     // Context is required to make an ImageView, so store a reference to it when Adapter is made.
     private Context context;
@@ -85,7 +88,7 @@ public class CardAdapter extends BaseAdapter
 
 
         // Find the card in the list of opened cards that correlates with the specific card being displayed, and use it's id to find its file name in the resources.
-        String cardImageFileName = "ixa" + openedCardPool.get(position).getId();
+        String cardImageFileName = IXALAN_LOW_RES_IMAGES + openedCardPool.get(position).getId();
         // Set the image of the item in the GridView to this card's image.
         cardView.setImageResource(context.getResources().getIdentifier(cardImageFileName, "drawable", context.getPackageName()));
         return cardView;

@@ -31,6 +31,7 @@ public class CardDatabase
     private static final int COST_COLUMN = 2;
     private static final int TYPE_COLUMN = 3;
     private static final int RARITY_COLUMN = 4;
+    private static final int FLIP_COLUMN = 5;
 
     // Creates the custom OpenHelper class, made to access the database from the assets folder.
     public CardDatabase(Context context)
@@ -65,9 +66,10 @@ public class CardDatabase
             int cost = result.getInt(COST_COLUMN);
             char type = result.getString(TYPE_COLUMN).charAt(0);
             char rarity = result.getString(RARITY_COLUMN).charAt(0);
+            boolean flip = result.getInt(FLIP_COLUMN) != 0;
 
             // With all information gathered for this card entry, make the card and add it to the Array.
-            cardsPool.add(new Card(id, cost, rarity, type, color));
+            cardsPool.add(new Card(id, cost, rarity, type, color, flip));
         }
 
         // Close database in CardDataBaseHelper.

@@ -7,7 +7,7 @@ import android.os.Parcelable;
  * Magic Drafter - CardDatabase.java
  * Created by Brigham Moll.
  * Created on 12/25/2017.
- * Last Revised on 12/31/2017.
+ * Last Revised on 1/1/2018.
  * Description: This class is used to represent a single card that has been drawn from a pack.
  * Information stored in the Card includes cost, color, rarity, collector's number (id), and type.
  * This information is used to generate random card packs for sealed/draft simulators. Information is also used to sort cards in user's view.
@@ -30,19 +30,22 @@ public class Card implements Parcelable
     private char color;
     // Whether the card is foil or not.
     private boolean foil;
+    // Whether the card has a back-side to it or not.
+    private boolean flip;
 
     // Basic Land type constants for making basic lands.
-    public static final char LANDRARITYCOLOR = 'C';
-    public static final char LANDTYPE = 'L';
+    private static final char LANDRARITYCOLOR = 'C';
+    private static final char LANDTYPE = 'L';
 
     // Initializes passed in card from the original full set pool.
-    public Card (int id, int cost, char rarity, char type, char color)
+    public Card (int id, int cost, char rarity, char type, char color, boolean flip)
     {
         this.id = id;
         this.cost = cost;
         this.rarity = rarity;
         this.color = color;
         this.type = type;
+        this.flip = flip;
         foil = false;
     }
 
@@ -53,11 +56,12 @@ public class Card implements Parcelable
         cost = -1;
         rarity = type = color = ' ';
         foil = false;
+        flip = false;
 
     }
 
     // Creating a Card via a Parcel. (Used for moving card lists around to different activities.
-    public Card(Parcel in)
+    private Card(Parcel in)
     {
         id = in.readInt();
         cost = in.readInt();
@@ -65,6 +69,7 @@ public class Card implements Parcelable
         type = in.readString().charAt(0);
         color = in.readString().charAt(0);
         foil = in.readByte() != 0;
+        flip = in.readByte() != 0;
     }
 
     // Creating a basic land Card.
@@ -75,6 +80,7 @@ public class Card implements Parcelable
         rarity = color = LANDRARITYCOLOR;
         type = LANDTYPE;
         foil = false;
+        flip = false;
     }
 
     // Getters and setters.
@@ -124,6 +130,16 @@ public class Card implements Parcelable
         return foil;
     }
 
+    public boolean getFlip()
+    {
+        return flip;
+    }
+
+    public void setFlip(boolean flip)
+    {
+        this.flip = flip;
+    }
+
     // Foil is never unset, so simply sets to true.
     public void setFoilToTrue()
     {
@@ -164,5 +180,6 @@ public class Card implements Parcelable
         dest.writeString(Character.toString(type));
         dest.writeString(Character.toString(color));
         dest.writeByte((byte)(foil ? 1: 0));
+        dest.writeByte((byte)(flip ? 1: 0));
     }
 }

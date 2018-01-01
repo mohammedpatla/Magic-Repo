@@ -1,12 +1,18 @@
 package com.example.moham.magicdrafter;
 
 import android.app.Activity;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.ImageView;
 
 import com.example.moham.magicdrafter.Model.Card;
 import com.example.moham.magicdrafter.Model.CardAdapter;
@@ -25,11 +31,31 @@ were randomly selected. Users will be able to switch between what cards are in t
 and will be able to sort cards as they build their typically, forty card deck. ‘Basic Land’ cards will be able to be added to the deck via a
 button along the top of the screen. (These are cards that normally can be added to a deck whenever one wishes.) When finished, they will be
 able to save the deck to view later on the load previous decks screen."
-Last Modified: 12/31/2017
+Last Modified: 1/1/2018
  */
 
 public class SealedActivity extends Activity
 {
+    // Constants for sorting shown cards.
+    public static final int COLOR_SORT = 1;
+    public static final int COST_SORT = 2;
+    public static final int TYPE_SORT = 3;
+
+    // Add basic lands activity constant.
+    public static final int ADD_BASICS_ACTIVITY = 2;
+
+    // Number of packs in the sealed format.
+    public static final int SEALED_PACKS = 6;
+
+    // Constant for knowing if a card is a basic land. (ID over 500.)
+    public static final int LAND_ID_START = 500;
+
+    // Used for file name finding when getting high resolution card images for Image dialog.
+    public static final String IXALAN_HIGH_RES_CARD_IMAGES = "ixahigh";
+
+    // Used for file name finding when getting the flip side of an expanded card.
+    public static final String FLIP_SIDE = "_2";
+
     // Views of Activity.
     GridView grdCardView;
     Button btnColorSort;
@@ -37,9 +63,6 @@ public class SealedActivity extends Activity
     Button btnTypeSort;
     Button btnAddBasics;
     Button btnCardsInDeck;
-
-    // Number of packs in the sealed format.
-    public static final int SEALED_PACKS = 6;
 
     // Card pools that are opened and selected.
     ArrayList<Card> openedCardPool;
@@ -51,16 +74,20 @@ public class SealedActivity extends Activity
     // Store the current card sorting method being used by int.
     int sortingMethod;
 
-    // Constants for sorting shown cards.
-    public static final int COLOR_SORT = 1;
-    public static final int COST_SORT = 2;
-    public static final int TYPE_SORT = 3;
+    // Indicates whether a card is currently being viewed up close. Used to stop unintentional adding/removing of cards while viewing one.
+    boolean cardExpanded;
 
-    // Add basic lands activity constant.
-    public static final int ADD_BASICS_ACTIVITY = 2;
+    // Store reference to expanded card image dialog here. By doing this, it can be dismissed when clicked on, or the image can be changed for flip cards.
+    Dialog cardExpandedViewDialog;
 
-    // Constant for knowing if a card is a basic land. (ID over 500.)
-    public static final int LAND_ID_START = 500;
+    // The ImageView within the expanded image dialog for a viewed card.
+    ImageView cardDialogImage;
+
+    // The card currently expanded for closer view on-screen.
+    Card expandedCard;
+
+    // Whether the card that has been expanded is currently flipped over or not.
+    boolean expandedCardFlipped;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -75,6 +102,13 @@ public class SealedActivity extends Activity
         btnTypeSort = findViewById(R.id.btn_type_sort);
         btnAddBasics = findViewById(R.id.btn_add_basics);
         btnCardsInDeck = findViewById(R.id.btn_cards_in_deck);
+
+        // Initialize cardExpanded to false, as no card is viewed up close yet.
+        cardExpanded = false;
+        // Set expandedCard to null because no card is viewed up close yet.
+        expandedCard = null;
+        // Set expandedCardFlipped to false, as no card has been viewed, let alone flipped.
+        expandedCardFlipped = false;
 
         // Shows card pool at first that is out of deck by default. Set openedCardsPoolShown to true.
         openedCardsPoolShown = true;
@@ -119,26 +153,87 @@ public class SealedActivity extends Activity
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id)
             {
-                // A card was selected. Add it to the list not being shown currently, and remove it from the one shown.
+                // Only do the following if the user isn't currently zoomed in on a card.
+                if(!cardExpanded)
+                {
+                    // A card was selected. Add it to the list not being shown currently, and remove it from the one shown.
+                    if (openedCardsPoolShown)
+                    {
+                        selectedCardPool.add(openedCardPool.get(position));
+                        openedCardPool.remove(position);
+                    } else
+                        {
+                        // Only add card to openedCardPool if it is not a basic land. (ID over LAND_ID_START.)
+                        if (selectedCardPool.get(position).getId() < LAND_ID_START)
+                        {
+                            openedCardPool.add(selectedCardPool.get(position));
+                        }
+                        selectedCardPool.remove(position);
+                    }
+                    // Then, refresh the GridView with shown list of cards.
+                    // Use notifyDataSetChanged() to refresh so that the list won't scroll back to the top. Also saves resources. (Over generating the adapter again.)
+                    // Also update button text on btnCardsInDeck to reflect number of cards selected.
+                    ((CardAdapter) grdCardView.getAdapter()).notifyDataSetChanged();
+                    btnCardsInDeck.setText(selectedCardPool.size() + "/40");
+                }
+            }
+        });
+
+        // If user holds down finger on card, it will launch a dialog with the high resolution image of that card.
+        // (Possibly in the future, sense gestures, use proper zooming animation or popup activity...)
+        grdCardView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
+            {
+                // Launch dialog here with image corresponding to this Card.
+                cardExpandedViewDialog = new Dialog(SealedActivity.this);
+
+                // Show dialog without any title, of course.
+                cardExpandedViewDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+
+                // Use layout to show picture of card instead of typical dialog with button, etc.
+                View convertView = getLayoutInflater().inflate(R.layout.card_dialog_zoomed, null);
+                cardExpandedViewDialog.setContentView(convertView);
+
+                // Change image of dialog to the appropriate one for this card.
+                // Also store reference to ImageView for changing image on flip cards.
+                cardDialogImage = convertView.findViewById(R.id.img_dialog);
+
+                // Find pool of card by checking which one is currently displayed, and use position to find which card, then finally use getId to get the ID of the card.
+                // With the ID, the cardImageFileName can be determined.
+                Card dialogCard;
                 if(openedCardsPoolShown)
                 {
-                    selectedCardPool.add(openedCardPool.get(position));
-                    openedCardPool.remove(position);
+                    dialogCard = openedCardPool.get(position);
                 }
                 else
                 {
-                    // Only add card to openedCardPool if it is not a basic land. (ID over LAND_ID_START.)
-                    if(selectedCardPool.get(position).getId() < LAND_ID_START)
-                    {
-                        openedCardPool.add(selectedCardPool.get(position));
-                    }
-                    selectedCardPool.remove(position);
+                    dialogCard = selectedCardPool.get(position);
                 }
-                // Then, refresh the GridView with shown list of cards.
-                // Use notifyDataSetChanged() to refresh so that the list won't scroll back to the top. Also saves resources. (Over generating the adapter again.)
-                // Also update button text on btnCardsInDeck to reflect number of cards selected.
-                ((CardAdapter)grdCardView.getAdapter()).notifyDataSetChanged();
-                btnCardsInDeck.setText(selectedCardPool.size() + "/40");
+                String cardImageFileName = IXALAN_HIGH_RES_CARD_IMAGES + dialogCard.getId();
+
+                // Set the card's image. Use IXALAN_HIGH_RES_CARD_IMAGES for the higher resolution images.
+                cardDialogImage.setImageResource(getResources().getIdentifier(cardImageFileName, "drawable", getPackageName()));
+
+                // Make sure that when the dialog is dismissed, it calls onExpandedCardDialogClick.
+                cardExpandedViewDialog.setOnDismissListener(new DialogInterface.OnDismissListener()
+                {
+                    @Override
+                    public void onDismiss(DialogInterface dialog)
+                    {
+                        onExpandedCardDialogClick(null);
+                    }
+                });
+
+                // Actually present the dialog to the user.
+                cardExpandedViewDialog.show();
+
+                // Set "cardExpanded" to true. When it is true, no cards can be added or removed from pools.
+                cardExpanded = true;
+                // Set expandedCard to a reference to the card being displayed so that the app will know which one is displayed currently.
+                expandedCard = dialogCard;
+
+                return false;
             }
         });
 
@@ -221,7 +316,8 @@ public class SealedActivity extends Activity
     }
 
     // This method is called if new cards need to be generated. If cards are passed in via Intent, this is not needed.
-    private void generateNewCards() {
+    private void generateNewCards()
+    {
         // Database of cards and their appropriate images... This is all built-in and pre-created in the assets folder.
         // Retrieve information from database and create the card pool to draw cards from.
         CardDatabase cardDb = new CardDatabase(this);
@@ -292,5 +388,41 @@ public class SealedActivity extends Activity
 
         // Start activity with the intent.
         startActivityForResult(intent, ADD_BASICS_ACTIVITY);
+    }
+
+    // If the expanded card view dialog is clicked on, this method will be called.
+    // If the card is a normal card, it will dismiss the dialog. If it is a flip card, it will flip the card on click. The next click will close the dialog afterwords.
+    public void onExpandedCardDialogClick(View view)
+    {
+        // If this method has been called with a view, try to flip the card, if it is a flip card. This means the user tapped the image of the card, not around the image.
+        // Check if card is a flip card.
+        if (expandedCard.getFlip() && view != null)
+        {
+            // If flip card, check if it has been flipped.
+            if(!expandedCardFlipped)
+            {
+                // If not, change the art to the flip side of it.
+                String cardImageFileName = IXALAN_HIGH_RES_CARD_IMAGES + expandedCard.getId() + FLIP_SIDE;
+                cardDialogImage.setImageResource(getResources().getIdentifier(cardImageFileName, "drawable", getPackageName()));
+                // Set expandedCardFlipped to true.
+                expandedCardFlipped = true;
+            }
+            else
+            {
+                // Set expandedCardFlipped to false.
+                expandedCardFlipped = false;
+                // If it has been flipped, dismiss.
+                cardExpandedViewDialog.dismiss();
+                // Set cardExpanded to false to symbolize that the user is finished viewing a card.
+                cardExpanded = false;
+            }
+        }
+        else
+        {
+            // Dismiss the dialog, the user is done with viewing the card.
+            cardExpandedViewDialog.dismiss();
+            // Set cardExpanded to false to symbolize that the user is finished viewing a card.
+            cardExpanded = false;
+        }
     }
 }

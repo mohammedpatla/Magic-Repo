@@ -16,7 +16,7 @@ import java.util.ArrayList;
 In this activity, navigated to from the SealedActivity, the user will be able to select a number of land cards to add to their deck in the
 types of Plains, Islands, Swamps, Mountains, or Forests. Using NumberPickers, they can select this amount. After selecting amounts,
 using the Add Basic Lands button, they will return to the SealedActivity, using Intents to continue their deck building with the added land cards.
-Last Modified: 12/31/2017
+Last Modified: 1/1/2018
  */
 
 public class AddBasicsActivity extends Activity
