@@ -6,4 +6,6 @@
     <string name="deck_numbers">0/40</string>
     <string name="add_basic_lands">Add Basic Lands</string>
     <string name="too_many_lands">You\'re trying to add too many lands! Please keep total lands at 35 or less.</string>
+    <string name="pack_0">Pack 0</string>
+    <string name="draft_numbers">0/42</string>
 </resources>

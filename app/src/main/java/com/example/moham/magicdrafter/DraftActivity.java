@@ -1,11 +1,12 @@
 package com.example.moham.magicdrafter;
 
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
+import android.widget.TextView;
 
 import com.example.moham.magicdrafter.Model.Card;
 import com.example.moham.magicdrafter.Model.CardAdapter;
@@ -14,36 +15,43 @@ import com.example.moham.magicdrafter.Model.CardPackGenerator;
 
 import java.util.ArrayList;
 
-/* SealedActivity - Brigham Moll - 12/24/2017
-"The sealed simulator consists of opening six booster packs of ‘Magic: the Gathering’ cards and building a deck using only the cards that
-were randomly selected. Users will be able to switch between what cards are in their pool of cards and what cards are in their current deck,
-and will be able to sort cards as they build their typically, forty card deck. ‘Basic Land’ cards will be able to be added to the deck via a
-button along the top of the screen. (These are cards that normally can be added to a deck whenever one wishes.) When finished, they will be
-able to save the deck to view later on the load previous decks screen."
+
+/* DraftActivity - Brigham Moll - 1/1/2018
+"The user, upon moving to this activity, will open a single pack in a simulator that looks similar
+to the sealed simulator screen. However, they will only be able to choose a single card from the
+pack’s contents that are shown before the remaining cards are passed to one of the AIs playing with
+ the player. The number of AIs can be adjusted later, but defaults to 7. Each of the AIs do the same
+  as the player, opening their packs, taking a single card, and passing the packs to the next AI or
+  player in a set order. This continues until no cards remain in the initial pack, then the process
+   starts again for two more packs. When all packs are completely used up, the user will be sent to
+   the sealed simulator’s deck builder with an intent carrying the cards they selected in the draft
+   process. They will immediately be able to build a deck using those cards."
+
+   This activity uses mechanisms from the SealedActivity to view and sort cards being drafted.
+    (Inherited through SimulatorActivity) However,
+   each time a card is selected and put into the selected pool, a new pool of cards is shown. (The cards
+   passed from an AI.) Eventually the cards will run out and a new pack will be opened again. This will occur 3 times with
+   a total of 3 packs. Afterwords, the pool of selected cards will be stored in an intent and be passed over to
+   the SealedActivity for deck building and eventual saving.
 Last Modified: 1/1/2018
  */
 
-public class SealedActivity extends SimulatorActivity
+public class DraftActivity extends SimulatorActivity
 {
-    // Recommended cards in a drafted/sealed deck.
-    private static final String SEALED_DECK_NUM = "/40";
+    // Views of Activity.
+    TextView txtPackNum;
 
-    // Add basic lands activity constant.
-    public static final int ADD_BASICS_ACTIVITY = 2;
+    // Total cards to be drafted.
+    private static final String TOTAL_TO_BE_DRAFTED = "/42";
 
     // Number of packs in the sealed format.
     public static final int SEALED_PACKS = 6;
 
-    // Views of Activity.
-    Button btnAddBasics;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-
-        // Initialize views.
-        btnAddBasics = findViewById(R.id.btn_add_basics);
 
         // Set a listener for the GridView so that when a card is tapped on, it is removed from the current list being shown and added to the other.
         // This could be from the pool(opened) to the deck(selected), or vice versa.
@@ -61,7 +69,7 @@ public class SealedActivity extends SimulatorActivity
                         selectedCardPool.add(openedCardPool.get(position));
                         openedCardPool.remove(position);
                     } else
-                        {
+                    {
                         // Only add card to openedCardPool if it is not a basic land. (ID over LAND_ID_START.)
                         if (selectedCardPool.get(position).getId() < LAND_ID_START)
                         {
@@ -73,19 +81,13 @@ public class SealedActivity extends SimulatorActivity
                     // Use notifyDataSetChanged() to refresh so that the list won't scroll back to the top. Also saves resources. (Over generating the adapter again.)
                     // Also update button text on btnCardsInDeck to reflect number of cards selected.
                     ((CardAdapter) grdCardView.getAdapter()).notifyDataSetChanged();
-                    btnCardsInDeck.setText(selectedCardPool.size() + SEALED_DECK_NUM);
+                    btnCardsInDeck.setText(selectedCardPool.size() + TOTAL_TO_BE_DRAFTED);
                 }
             }
         });
 
-        // Set a listener for adding basic lands to the current deck. This will open the AddBasicsActivity activity. There, users will choose the lands they want added before returning via intents.
-        btnAddBasics.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addBasics();
-            }
-        });
-
+        // Initialize views.
+        txtPackNum = findViewById(R.id.txt_pack_num);
     }
 
     // This method is called if new cards need to be generated. If cards are passed in via Intent, this is not needed.
@@ -109,37 +111,15 @@ public class SealedActivity extends SimulatorActivity
         selectedCardPool = new ArrayList<>();
     }
 
-    // Open basic land adding activity, where user selects lands to add to their deck. Using intents, data will be transferred between activities regarding current cards in the opened and selected pools.
-    private void addBasics()
-    {
-        Intent intent = new Intent(getApplicationContext(), AddBasicsActivity.class);
-        // Must pass lists of cards so that the app remembers them when moving to new activities.
-        // If not remembered, SealedActivity will generate a new card pool...
-        // Create a bundle, since there is two lists of cards being passed in, not a single card.
-        Bundle bundle = new Bundle();
-        // Store card lists.
-        bundle.putParcelableArrayList("openedCardPool", openedCardPool);
-        bundle.putParcelableArrayList("selectedCardPool", selectedCardPool);
-        // Put bundle of card lists into intent.
-        intent.putExtras(bundle);
-
-        // Put a boolean into the intent. This will tell AddBasicsActivity that the Intent is from SealedActivity.
-        intent.putExtra("cardPoolIntent", true);
-
-        // Start activity with the intent.
-        startActivityForResult(intent, ADD_BASICS_ACTIVITY);
-    }
-
     @Override
     protected int getLayoutResourceId()
     {
-        return R.layout.activity_sealed;
+        return R.layout.activity_draft;
     }
 
     @Override
-    protected Context getSimContext()
-    {
-        return SealedActivity.this;
+    protected Context getSimContext() {
+        return DraftActivity.this;
     }
 
     @Override
@@ -157,7 +137,7 @@ public class SealedActivity extends SimulatorActivity
                 selectedCardPool = bundle.getParcelableArrayList("selectedCardPool");
 
                 // Update card counter button according to passed in selected card pool (deck).
-                btnCardsInDeck.setText(selectedCardPool.size() + SEALED_DECK_NUM);
+                btnCardsInDeck.setText(selectedCardPool.size() + TOTAL_TO_BE_DRAFTED);
             }
             else
             {

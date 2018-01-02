@@ -17,7 +17,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".SealedActivity" />
-        <activity android:name=".AddBasicsActivity"/>
+        <activity android:name=".AddBasicsActivity" />
+        <activity android:name=".DraftActivity" />
     </application>
 
 </manifest>

@@ -7,9 +7,10 @@
     tools:context="com.example.moham.magicdrafter.MainActivity">
 
     <TextView
+        android:id="@+id/textView"
         android:layout_width="181dp"
         android:layout_height="80dp"
-        android:text="Temp button for changing activities, remove this when slide out menu is implemented"
+        android:text="Temp buttons for changing activities, remove this when slide out menu is implemented"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.921"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -26,5 +27,15 @@
         android:text="Go to sealed"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btn_temp_draft"
+        android:layout_width="116dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="256dp"
+        android:layout_marginEnd="16dp"
+        android:text="Go to draft"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </android.support.constraint.ConstraintLayout>
