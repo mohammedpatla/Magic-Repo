@@ -19,6 +19,9 @@
         <activity android:name=".SealedActivity" />
         <activity android:name=".AddBasicsActivity" />
         <activity android:name=".DraftActivity" />
+        <activity
+            android:name=".NavigationDrawer"
+            android:label="@string/title_activity_navigation_drawer"></activity>
     </application>
 
 </manifest>
