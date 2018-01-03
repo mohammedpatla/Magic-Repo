@@ -70,4 +70,13 @@
         android:textAppearance="@android:style/TextAppearance.Holo.Small"
         app:layout_constraintEnd_toEndOf="@+id/btn_cards_in_deck"
         app:layout_constraintTop_toBottomOf="@+id/btn_cards_in_deck" />
+
+    <Button
+        android:id="@+id/btn_save"
+        android:layout_width="wrap_content"
+        android:layout_height="35dp"
+        android:text="@string/save"
+        android:textAppearance="@android:style/TextAppearance.Holo.Small"
+        app:layout_constraintEnd_toStartOf="@+id/btn_cards_in_deck"
+        app:layout_constraintTop_toTopOf="@+id/btn_cards_in_deck" />
 </android.support.constraint.ConstraintLayout>
