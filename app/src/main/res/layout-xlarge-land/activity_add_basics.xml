@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.moham.magicdrafter.AddBasicsActivity"
+    tools:layout_editor_absoluteY="81dp">
+
+    <ImageView
+        android:id="@+id/img_plains"
+        android:layout_width="160dp"
+        android:layout_height="200dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:src="@drawable/ixa501"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/img_island"
+        android:layout_width="160dp"
+        android:layout_height="200dp"
+        android:layout_marginStart="8dp"
+        android:src="@drawable/ixa502"
+        app:layout_constraintStart_toEndOf="@+id/pick_plains"
+        app:layout_constraintTop_toTopOf="@+id/pick_plains" />
+
+    <ImageView
+        android:id="@+id/img_swamp"
+        android:layout_width="160dp"
+        android:layout_height="200dp"
+        android:layout_marginStart="8dp"
+        android:src="@drawable/ixa503"
+        app:layout_constraintStart_toEndOf="@+id/pick_island"
+        app:layout_constraintTop_toTopOf="@+id/pick_island" />
+
+    <ImageView
+        android:id="@+id/img_mountain"
+        android:layout_width="160dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/ixa504"
+        app:layout_constraintStart_toStartOf="@+id/img_plains"
+        app:layout_constraintTop_toBottomOf="@+id/img_plains" />
+
+    <NumberPicker
+        android:id="@+id/pick_plains"
+        android:layout_width="160dp"
+        android:layout_height="200dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintStart_toEndOf="@+id/img_plains"
+        app:layout_constraintTop_toTopOf="@+id/img_plains" />
+
+    <NumberPicker
+        android:id="@+id/pick_island"
+        android:layout_width="160dp"
+        android:layout_height="200dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintStart_toEndOf="@+id/img_island"
+        app:layout_constraintTop_toTopOf="@+id/img_island" />
+
+    <NumberPicker
+        android:id="@+id/pick_swamp"
+        android:layout_width="160dp"
+        android:layout_height="200dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintStart_toEndOf="@+id/img_swamp"
+        app:layout_constraintTop_toTopOf="@+id/img_swamp" />
+
+    <NumberPicker
+        android:id="@+id/pick_mountain"
+        android:layout_width="160dp"
+        android:layout_height="200dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintStart_toEndOf="@+id/img_mountain"
+        app:layout_constraintTop_toTopOf="@+id/img_mountain" />
+
+    <Button
+        android:id="@+id/btn_add_basic_lands"
+        android:layout_width="247dp"
+        android:layout_height="134dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="32dp"
+        android:text="@string/add_basic_lands"
+        android:textAppearance="@android:style/TextAppearance.Holo.Medium"
+        app:layout_constraintStart_toEndOf="@+id/pick_forest"
+        app:layout_constraintTop_toTopOf="@+id/pick_forest" />
+
+    <NumberPicker
+        android:id="@+id/pick_forest"
+        android:layout_width="160dp"
+        android:layout_height="200dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintStart_toEndOf="@+id/img_forest"
+        app:layout_constraintTop_toTopOf="@+id/img_forest" />
+
+    <ImageView
+        android:id="@+id/img_forest"
+        android:layout_width="160dp"
+        android:layout_height="200dp"
+        android:layout_marginStart="8dp"
+        android:src="@drawable/ixa505"
+        app:layout_constraintStart_toEndOf="@+id/pick_mountain"
+        app:layout_constraintTop_toTopOf="@+id/pick_mountain" />
+</android.support.constraint.ConstraintLayout>
