@@ -16,12 +16,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SealedActivity" />
+        <activity
+            android:name=".SealedActivity"
+            android:parentActivityName=".NavigationDrawer" />
         <activity android:name=".AddBasicsActivity" />
-        <activity android:name=".DraftActivity" />
+        <activity
+            android:name=".DraftActivity"
+            android:parentActivityName=".NavigationDrawer" />
         <activity
             android:name=".NavigationDrawer"
-            android:label="@string/title_activity_navigation_drawer"></activity>
+            android:label="@string/title_activity_navigation_drawer" />
+        <activity android:name=".Main2Activity" />
+        <activity android:name=".MyDeck"
+            android:parentActivityName=".NavigationDrawer"></activity>
     </application>
 
 </manifest>

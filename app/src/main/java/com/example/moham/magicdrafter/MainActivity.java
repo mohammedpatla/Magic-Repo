@@ -50,6 +50,9 @@ public class MainActivity extends Activity {
             }
         });
 
+
+        Intent i = new Intent(getApplicationContext(), NavigationDrawer.class);
+        startActivity(i);
     }
 
     public void temptomenu()

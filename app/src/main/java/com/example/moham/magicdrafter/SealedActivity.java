@@ -72,6 +72,7 @@ public class SealedActivity extends SimulatorActivity
                         }
                         selectedCardPool.remove(position);
                     }
+
                     // Then, refresh the GridView with shown list of cards.
                     // Use notifyDataSetChanged() to refresh so that the list won't scroll back to the top. Also saves resources. (Over generating the adapter again.)
                     // Also update button text on btnCardsInDeck to reflect number of cards selected.

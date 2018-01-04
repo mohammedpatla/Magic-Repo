@@ -6,6 +6,7 @@ import android.app.ActionBar;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -51,10 +52,30 @@ public class NavigationDrawer extends Activity
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
+        /*
         FragmentManager fragmentManager = getFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
                 .commit();
+        */
+        switch (position) {
+            case 1:
+                Intent intent = new Intent(getApplicationContext(), SealedActivity.class);
+                startActivity(intent);
+                //restoreActionBar();
+                break;
+            case 2:
+                Intent i = new Intent(getApplicationContext(), DraftActivity.class);
+
+                startActivity(i);
+
+                break;
+            case 3:
+                Intent j = new Intent(getApplicationContext(), MyDeck.class);
+
+                startActivity(j);
+                break;
+        }
     }
 
     public void onSectionAttached(int number) {
@@ -66,6 +87,9 @@ public class NavigationDrawer extends Activity
                 mTitle = getString(R.string.title_section2);
                 break;
             case 3:
+                mTitle = getString(R.string.title_section3);
+                break;
+            case 4:
                 mTitle = getString(R.string.title_section3);
                 break;
         }

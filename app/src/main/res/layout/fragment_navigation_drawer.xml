@@ -8,6 +8,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.moham.magicdrafter.NavigationDrawer$PlaceholderFragment">
 
+
     <TextView
         android:id="@+id/section_label"
         android:layout_width="wrap_content"
