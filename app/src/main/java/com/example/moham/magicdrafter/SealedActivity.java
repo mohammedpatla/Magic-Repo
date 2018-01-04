@@ -96,7 +96,7 @@ public class SealedActivity extends SimulatorActivity
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), MyDeck.class);
+                Intent intent = new Intent(getApplicationContext(), MyDeckActivity.class);
                 // Must pass lists of cards so that the app remembers them when moving to new activities.
                 // Create a bundle, since there is two lists of cards being passed in, not a single card.
                 Bundle bundle = new Bundle();
