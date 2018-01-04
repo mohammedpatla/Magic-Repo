@@ -292,7 +292,7 @@ public abstract class SimulatorActivity extends Activity
 
         // Create dialog with settings.
         builder.setTitle("Exiting Simulator...")
-                .setIcon(R.mipmap.ic_launcher_round)
+                .setIcon(R.mipmap.ic_magic_drafter_round)
                 .setMessage("You will lose any current simulation data if you continue. Are you sure you want to go to the main menu?")
                 .setPositiveButton("Exit", backListener)
                 .setNegativeButton("Stay", backListener);
