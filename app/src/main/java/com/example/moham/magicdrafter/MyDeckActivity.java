@@ -23,7 +23,7 @@ import java.util.ArrayList;
 
 Last Modified: 1/3/2018
  */
-public class MyDeck extends Activity  {
+public class MyDeckActivity extends Activity  {
 
     // Recommended cards in a drafted/sealed deck.
     private static final String SEALED_DECK_NUM = "/40";
@@ -52,7 +52,6 @@ public class MyDeck extends Activity  {
     protected void initialize() {
 
         // Check for Intent with possibly loaded card pools in it from another Activity.
-        // If card pools are found, do NOT generateNewCards(). Use what is saved.
         Intent intent = getIntent();
         if(intent != null)
         {
@@ -62,9 +61,6 @@ public class MyDeck extends Activity  {
                 Bundle bundle = intent.getExtras();
                 openedCardPool = bundle.getParcelableArrayList("openedCardPool");
                 selectedCardPool = bundle.getParcelableArrayList("selectedCardPool");
-
-                // Update card counter button according to passed in selected card pool (deck).
-                //btnCardsInDeck.setText(selectedCardPool.size() + SEALED_DECK_NUM);
             }
             else
             {

@@ -9,7 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.example.moham.magicdrafter.MyDeck;
+import com.example.moham.magicdrafter.MyDeckActivity;
+import com.example.moham.magicdrafter.MyDeckActivity;
 import com.example.moham.magicdrafter.R;
 import com.example.moham.magicdrafter.Model.Deck;
 
@@ -25,7 +26,7 @@ public class DeckAdapter extends ArrayAdapter<Deck> {
     private Context context;
     private int resource;
 
-    public DeckAdapter(MyDeck context, int resource, ArrayList<Deck> mydecks) {
+    public DeckAdapter(MyDeckActivity context, int resource, ArrayList<Deck> mydecks) {
         super(context, resource, mydecks);
 
         this.context = context;
