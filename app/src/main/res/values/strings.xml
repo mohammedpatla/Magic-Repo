@@ -9,4 +9,8 @@
     <string name="pack_0">Pack 0</string>
     <string name="draft_numbers">0/45</string>
     <string name="save">Save</string>
+    <string name="exitingSim">Exiting Simulator...</string>
+    <string name="simWarning">You will lose any current simulation data if you continue. Are you sure you want to go to the main menu?</string>
+    <string name="exit">Exit</string>
+    <string name="stay">Stay</string>
 </resources>

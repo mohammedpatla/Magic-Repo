@@ -125,10 +125,14 @@ public class Card implements Parcelable
         this.color = color;
     }
 
+    // As of now, the foil feature is not used. In a future release, may show cards with a glow if they are foil. May also make AIs prioritize foils higher than other cards.
+    // Foils are still required in the application as of now to generate accurate packs though. (Hence being partially implemented.)
+    /*
     public boolean getFoil()
     {
         return foil;
     }
+    */
 
     public boolean getFlip()
     {

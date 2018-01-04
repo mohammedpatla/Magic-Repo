@@ -291,11 +291,11 @@ public abstract class SimulatorActivity extends Activity
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         // Create dialog with settings.
-        builder.setTitle("Exiting Simulator...")
+        builder.setTitle(getString(R.string.exitingSim))
                 .setIcon(R.mipmap.ic_magic_drafter_round)
-                .setMessage("You will lose any current simulation data if you continue. Are you sure you want to go to the main menu?")
-                .setPositiveButton("Exit", backListener)
-                .setNegativeButton("Stay", backListener);
+                .setMessage(getString(R.string.simWarning))
+                .setPositiveButton(getString(R.string.exit), backListener)
+                .setNegativeButton(getString(R.string.stay), backListener);
 
         // Make an instance of the dialog.
         AlertDialog dialog = builder.create();
