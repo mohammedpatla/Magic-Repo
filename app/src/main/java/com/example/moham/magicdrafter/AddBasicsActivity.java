@@ -102,6 +102,41 @@ public class AddBasicsActivity extends Activity
         }
     }
 
+    // If screen is rotated (or activity lost), keep number picker selections and card pools.
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        // Save current basic land selections.
+        outState.putInt("plains", pickPlains.getValue());
+        outState.putInt("island", pickIsland.getValue());
+        outState.putInt("swamp", pickSwamp.getValue());
+        outState.putInt("mountain", pickMountain.getValue());
+        outState.putInt("forest", pickForest.getValue());
+
+        // Save card pools.
+        outState.putParcelableArrayList("openedCardPool", openedCardPool);
+        outState.putParcelableArrayList("selectedCardPool", selectedCardPool);
+    }
+
+    // If screen is rotated (or activity lost), keep number picker selections and card pools.
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState)
+    {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        // Load land selections.
+        pickPlains.setValue(savedInstanceState.getInt("plains"));
+        pickIsland.setValue(savedInstanceState.getInt("island"));
+        pickSwamp.setValue(savedInstanceState.getInt("swamp"));
+        pickMountain.setValue(savedInstanceState.getInt("mountain"));
+        pickForest.setValue(savedInstanceState.getInt("forest"));
+
+        // Load card pools.
+        openedCardPool = savedInstanceState.getParcelableArrayList("openedCardPool");
+        selectedCardPool = savedInstanceState.getParcelableArrayList("selectedCardPool");
+    }
+
     // This method will add the basic land cards that were requested to the current deck.
     private boolean addBasicLands()
     {

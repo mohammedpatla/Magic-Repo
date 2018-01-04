@@ -35,7 +35,7 @@ pack’s contents that are shown before the remaining cards are passed to one of
    passed from an AI.) Eventually the cards will run out and a new pack will be opened again. This will occur 3 times with
    a total of 3 packs. Afterwords, the pool of selected cards will be stored in an intent and be passed over to
    the SealedActivity for deck building and eventual saving.
-Last Modified: 1/2/2018
+Last Modified: 1/4/2018
  */
 
 public class DraftActivity extends SimulatorActivity
@@ -103,6 +103,36 @@ public class DraftActivity extends SimulatorActivity
         // Update display.
         String packNumString = "Pack " + String.valueOf(packNum);
         txtPackNum.setText(packNumString);
+    }
+
+    // Used to save info when activity is compromised. (For example, screen rotated)
+    @Override
+    protected void onSaveInstanceState(Bundle outState)
+    {
+        super.onSaveInstanceState(outState);
+
+        // Save AIs list.
+        outState.putParcelableArrayList("listOfAis", listOfAis);
+
+        // Save packNum.
+        outState.putInt("packNum", packNum);
+    }
+
+    // Used to load info when activity is compromised. (For example, screen rotated)
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState)
+    {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        // Load AIs list.
+        listOfAis = savedInstanceState.getParcelableArrayList("listOfAis");
+
+        // Load packNum.
+        packNum = savedInstanceState.getInt("packNum");
+        // Update TextView.
+        txtPackNum.setText("Pack " + String.valueOf(packNum));
+        // Update number of cards selected.
+        btnCardsInDeck.setText(String.valueOf(selectedCardPool.size()) + TOTAL_TO_BE_DRAFTED);
     }
 
     // This method is called if new cards need to be generated. (A new drafting round starts after each pack is completely drafted.)

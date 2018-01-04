@@ -22,12 +22,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_type_sort" />
+        app:layout_constraintTop_toBottomOf="@+id/btn_add_basics" />
 
     <Button
         android:id="@+id/btn_color_sort"
-        android:layout_width="wrap_content"
-        android:layout_height="33dp"
+        android:layout_width="90dp"
+        android:layout_height="47dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="40dp"
         android:text="@string/color"
         android:textAppearance="@android:style/TextAppearance.Holo.Small"
@@ -36,8 +37,9 @@
 
     <Button
         android:id="@+id/btn_cost_sort"
-        android:layout_width="wrap_content"
-        android:layout_height="33dp"
+        android:layout_width="90dp"
+        android:layout_height="47dp"
+        android:layout_marginStart="16dp"
         android:text="@string/cost"
         android:textAppearance="@android:style/TextAppearance.Holo.Small"
         app:layout_constraintStart_toEndOf="@+id/btn_color_sort"
@@ -45,8 +47,9 @@
 
     <Button
         android:id="@+id/btn_type_sort"
-        android:layout_width="wrap_content"
-        android:layout_height="33dp"
+        android:layout_width="90dp"
+        android:layout_height="47dp"
+        android:layout_marginStart="16dp"
         android:text="@string/type"
         android:textAppearance="@android:style/TextAppearance.Holo.Small"
         app:layout_constraintStart_toEndOf="@+id/btn_cost_sort"
@@ -54,8 +57,10 @@
 
     <Button
         android:id="@+id/btn_cards_in_deck"
-        android:layout_width="wrap_content"
+        android:layout_width="73dp"
         android:layout_height="35dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="8dp"
         android:text="@string/deck_numbers"
         android:textAppearance="@android:style/TextAppearance.Holo.Small"
         app:layout_constraintEnd_toEndOf="parent"
@@ -63,8 +68,8 @@
 
     <Button
         android:id="@+id/btn_add_basics"
-        android:layout_width="wrap_content"
-        android:layout_height="33dp"
+        android:layout_width="161dp"
+        android:layout_height="48dp"
         android:layout_marginTop="8dp"
         android:text="@string/add_basic_lands"
         android:textAppearance="@android:style/TextAppearance.Holo.Small"
@@ -73,8 +78,9 @@
 
     <Button
         android:id="@+id/btn_save"
-        android:layout_width="wrap_content"
+        android:layout_width="73dp"
         android:layout_height="35dp"
+        android:layout_marginEnd="16dp"
         android:text="@string/save"
         android:textAppearance="@android:style/TextAppearance.Holo.Small"
         app:layout_constraintEnd_toStartOf="@+id/btn_cards_in_deck"

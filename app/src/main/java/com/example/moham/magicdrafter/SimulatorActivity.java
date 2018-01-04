@@ -1,9 +1,11 @@
 package com.example.moham.magicdrafter;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -26,6 +28,7 @@ import java.util.Collections;
     This abstract Activity class will be inherited from by SealedActivity and DraftActivity.
     The two activities share a lot of code for viewing and adding/removing cards from pools.
     Shared code will be placed here so that differences are clearly in their respective classes.
+    Modified: 1/4/2018
  */
 
 public abstract class SimulatorActivity extends Activity
@@ -234,6 +237,95 @@ public abstract class SimulatorActivity extends Activity
         });
     }
 
+    // Store card info so new cards are not generated when the activity is compromised by say, a rotation of the device.
+    @Override
+    protected void onSaveInstanceState(Bundle outState)
+    {
+        super.onSaveInstanceState(outState);
+
+        // Save card info.
+        outState.putParcelableArrayList("openedCardPool", openedCardPool);
+        outState.putParcelableArrayList("selectedCardPool", selectedCardPool);
+
+        // Save whether opened or selected card pool is shown.
+        outState.putBoolean("openedCardsPoolShown", openedCardsPoolShown);
+
+        // Save what sorting method was used last.
+        outState.putInt("sortingMethod", sortingMethod);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState)
+    {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        // Load card info.
+        openedCardPool = savedInstanceState.getParcelableArrayList("openedCardPool");
+        selectedCardPool = savedInstanceState.getParcelableArrayList("selectedCardPool");
+
+        // Load which pool is shown.
+        openedCardsPoolShown = savedInstanceState.getBoolean("openedCardsPoolShown");
+
+        // Load previous sorting method used.
+        sortingMethod = savedInstanceState.getInt("sortingMethod");
+
+        // Refresh display.
+        CardAdapter adapter = (CardAdapter)grdCardView.getAdapter();
+        if(openedCardsPoolShown)
+        {
+            adapter.changeCardList(openedCardPool);
+        }
+        else
+        {
+            adapter.changeCardList(selectedCardPool);
+        }
+        adapter.notifyDataSetChanged();
+
+    }
+
+    // If the Back Button is pressed, warn user they will lose data and be sent to MainActivity if they continue.
+    @Override
+    public void onBackPressed()
+    {
+        // Warn the user if they continue they will be redirected and lose data.
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        // Create dialog with settings.
+        builder.setTitle(getString(R.string.exitingSim))
+                .setIcon(R.mipmap.ic_magic_drafter_round)
+                .setMessage(getString(R.string.simWarning))
+                .setPositiveButton(getString(R.string.exit), backListener)
+                .setNegativeButton(getString(R.string.stay), backListener);
+
+        // Make an instance of the dialog.
+        AlertDialog dialog = builder.create();
+
+        // Show dialog.
+        dialog.show();
+    }
+
+    // Responses to back button dialog.
+    DialogInterface.OnClickListener backListener = new DialogInterface.OnClickListener()
+    {
+        @Override
+        public void onClick(DialogInterface dialog, int which)
+        {
+            switch(which)
+            {
+                case DialogInterface.BUTTON_POSITIVE:
+                    // Go to the MainActivity. Do not store any data, user has been warned.
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    startActivity(intent);
+                    break;
+                case DialogInterface.BUTTON_NEGATIVE:
+                    // Don't do anything. The user has chosen to stay on this activity.
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
+
     // Sort the cards in the currently shown pool (Either opened, or selected.) according to the current sortingMethod.
     private void sortCards()
     {
@@ -260,6 +352,8 @@ public abstract class SimulatorActivity extends Activity
                 break;
             case COST_SORT:
                 Collections.sort(cardListToSort, new CostSort());
+                break;
+            default:
                 break;
         }
 
