@@ -1,5 +1,9 @@
 package com.example.moham.magicdrafter.Model;
 
+import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -7,7 +11,7 @@ import java.util.Random;
  * Magic Drafter - DraftAi.java
  * Created by Brigham Moll.
  * Created on 1/1/2018.
- * Last Revised on 1/3/2018.
+ * Last Revised on 1/4/2018.
  * Description: This class represents an instance of an AI, used in the DraftSimulator. By default,
  * there are seven AIs, but the settings screen will allow customization of this.
  * Each AI, during a draft, picks a single card from their own packs, like the player.
@@ -17,13 +21,12 @@ import java.util.Random;
  * Different AI difficulties may be implemented in the future.
  */
 
-public class DraftAi
+public class DraftAi implements Parcelable
 {
     // Constants for card rarities.
     private static final char MYTHIC = 'M';
     private static final char RARE = 'R';
     private static final char UNCOMMON = 'U';
-    private static final char COMMON = 'C';
 
     // Constant for creatures, for totalCreatures.
     private static final char CREATURE = 'C';
@@ -68,6 +71,52 @@ public class DraftAi
         totalCreatures = 0;
     }
 
+    // Create an AI out of a Parcel. (Used when loading saved instance states.)
+    private DraftAi(Parcel in)
+    {
+        // Initialize a randomizer.
+        randomSelector = new Random();
+
+        // Initialize card pools for this AI based on Parcel.
+        Bundle cardBundle = in.readBundle(ClassLoader.getSystemClassLoader());
+        openedCardPool = cardBundle.getParcelableArrayList("openedCardPool");
+        selectedCardPool = cardBundle.getParcelableArrayList("selectedCardPool");
+        preferredColors = new ArrayList<>();
+        ArrayList<String> prefColors = cardBundle.getStringArrayList("preferredColors");
+        for (int iColor = 0; iColor < prefColors.size(); iColor++)
+        {
+            preferredColors.add(prefColors.get(iColor).charAt(0));
+        }
+        // Get totalCreatures.
+        totalCreatures = in.readInt();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        // Called by runtime when writing to Parcel. Puts an AI into a Parcel.
+        // Order is important.
+        // Put both card pools and preferred colors in a bundle, then write the bundle.
+        Bundle cardBundle = new Bundle();
+        cardBundle.putParcelableArrayList("openedCardPool", openedCardPool);
+        cardBundle.putParcelableArrayList("selectedCardPool", selectedCardPool);
+        ArrayList<String> prefColors = new ArrayList<>();
+        for(int iColor = 0; iColor < preferredColors.size(); iColor++)
+        {
+            prefColors.add(preferredColors.get(iColor).toString());
+        }
+        cardBundle.putStringArrayList("preferredColors", prefColors);
+        dest.writeBundle(cardBundle);
+        // Write totalCreatures.
+        dest.writeInt(totalCreatures);
+    }
+
+    @Override
+    public int describeContents()
+    {
+        // Leave as default.
+        return 0;
+    }
+
     // Used to give an AI a new pack of cards.
     public void setOpenedCardPool(ArrayList<Card> openedCardPool)
     {
@@ -79,6 +128,22 @@ public class DraftAi
     {
         return openedCardPool;
     }
+
+    // Used for Parcelable in order to save AIs on Activity being compromised.
+    public static final Creator<DraftAi> CREATOR = new Creator<DraftAi>()
+    {
+        @Override
+        public DraftAi createFromParcel(Parcel in)
+        {
+            return new DraftAi(in);
+        }
+
+        @Override
+        public DraftAi[] newArray(int size)
+        {
+            return new DraftAi[size];
+        }
+    };
 
     // Used to make an AI select a card from their openedCardPool and add it to their selectedCardPool.
     public void selectACard()

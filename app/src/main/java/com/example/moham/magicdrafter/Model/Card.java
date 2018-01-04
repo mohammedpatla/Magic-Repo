@@ -60,7 +60,7 @@ public class Card implements Parcelable
 
     }
 
-    // Creating a Card via a Parcel. (Used for moving card lists around to different activities.
+    // Creating a Card via a Parcel. (Used for moving card lists around to different activities.)
     private Card(Parcel in)
     {
         id = in.readInt();

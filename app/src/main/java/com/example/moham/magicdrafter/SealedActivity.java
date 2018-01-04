@@ -21,7 +21,7 @@ were randomly selected. Users will be able to switch between what cards are in t
 and will be able to sort cards as they build their typically, forty card deck. ‘Basic Land’ cards will be able to be added to the deck via a
 button along the top of the screen. (These are cards that normally can be added to a deck whenever one wishes.) When finished, they will be
 able to save the deck to view later on the load previous decks screen."
-Last Modified: 1/2/2018
+Last Modified: 1/4/2018
  */
 
 public class SealedActivity extends SimulatorActivity
@@ -97,6 +97,15 @@ public class SealedActivity extends SimulatorActivity
                 Toast.makeText(SealedActivity.this, "TEMP TOAST: SAVING", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        // Most of restore is dealt with by the SimulatorActivity inherited part.
+        // Just need to refresh selection counter.
+        btnCardsInDeck.setText(String.valueOf(selectedCardPool.size()) + SEALED_DECK_NUM);
     }
 
     // This method is called if new cards need to be generated. If cards are passed in via Intent, this is not needed.
