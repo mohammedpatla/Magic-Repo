@@ -31,6 +31,7 @@ public class SealedActivity extends SimulatorActivity
 
     // Add basic lands activity constant.
     public static final int ADD_BASICS_ACTIVITY = 2;
+    public static final int MY_DECK_ACTIVITY = 4;
 
     // Number of packs in the sealed format.
     public static final int SEALED_PACKS = 6;
@@ -95,7 +96,21 @@ public class SealedActivity extends SimulatorActivity
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(SealedActivity.this, "TEMP TOAST: SAVING", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getApplicationContext(), MyDeck.class);
+                // Must pass lists of cards so that the app remembers them when moving to new activities.
+                // Create a bundle, since there is two lists of cards being passed in, not a single card.
+                Bundle bundle = new Bundle();
+                // Store card lists.
+                bundle.putParcelableArrayList("openedCardPool", openedCardPool);
+                bundle.putParcelableArrayList("selectedCardPool", selectedCardPool);
+                // Put bundle of card lists into intent.
+                intent.putExtras(bundle);
+
+                // Put a boolean into the intent. This will tell MyDeck(Activity) that the Intent is from SealedActivity.
+                intent.putExtra("cardPoolIntent", true);
+
+                // Start activity with the intent.
+                startActivityForResult(intent, MY_DECK_ACTIVITY);
             }
         });
     }
