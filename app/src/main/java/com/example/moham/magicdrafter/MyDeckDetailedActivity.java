@@ -14,6 +14,11 @@ public class MyDeckDetailedActivity extends Activity {
     EditText edtdeckType;
     EditText edtdeckDescription;
 
+    //My Activity Variables
+    String name ;
+    String deckType ;
+    String deckDesc;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,9 +30,9 @@ public class MyDeckDetailedActivity extends Activity {
         edtdeckDescription = findViewById(R.id.edtxt_deckDescription);
 
         Intent i = getIntent();
-        final String name = i.getStringExtra("name");
-        final String deckType = i.getStringExtra("deckType");
-        final String deckDesc = i.getStringExtra("deckDesc");
+        name = i.getStringExtra("name");
+        deckType = i.getStringExtra("deckType");
+        deckDesc = i.getStringExtra("deckDesc");
 
         edtName.setText(name);
         edtdeckType.setText(deckType);
@@ -51,6 +56,27 @@ public class MyDeckDetailedActivity extends Activity {
                 finish();
             }
         });
+
+    }
+    @Override
+    protected void onSaveInstanceState(Bundle outState)
+    {
+        super.onSaveInstanceState(outState);
+
+        // Save card info.
+        outState.putString("name", name);
+        outState.putString("deckType", deckType);
+        outState.putString("deckDesc", deckDesc);
+
+    }
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        // Load card info.
+        name = savedInstanceState.getString("name");
+        deckType = savedInstanceState.getString("deckType");
+        deckDesc = savedInstanceState.getString("deckDesc");
 
     }
 }

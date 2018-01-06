@@ -6,7 +6,7 @@
             android:dialogTitle="Select Draft Simulator Ais"
             android:entries="@array/numberof_ais"
             android:entryValues="@array/numberof_ais_values"
-            android:key="numberofais"
+            android:key="numAis"
             android:summary="for draft simulator"
             android:title="Set Number of AI's"/>
 

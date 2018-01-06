@@ -26,14 +26,15 @@
             android:name=".DraftActivity"
             android:parentActivityName=".NavigationDrawer" />
         <activity
-            android:name=".NavigationDrawer"
-            android:label="@string/title_activity_navigation_drawer" />
+            android:name=".NavigationDrawer" />
         <activity android:name=".Main2Activity" />
         <activity
             android:name=".MyDeckActivity"
             android:parentActivityName=".NavigationDrawer" />
-        <activity android:name=".MyDeckDetailedActivity" />
-        <activity android:name=".UserPrefrenceActivity"></activity>
+        <activity android:name=".MyDeckDetailedActivity"
+            android:parentActivityName=".MyDeckActivity"/>
+        <activity android:name=".UserPrefrenceActivity"
+            android:parentActivityName=".NavigationDrawer"></activity>
     </application>
 
 </manifest>

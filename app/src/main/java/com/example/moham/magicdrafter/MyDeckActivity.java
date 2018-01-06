@@ -54,7 +54,7 @@ public class MyDeckActivity extends Activity  {
     // Recommended cards in a drafted/sealed deck.
     private static final String SEALED_DECK_NUM = "/40";
     private static final int SECOND_ACTIVITY =2;
-    private static final int FIRST_ACTIVITY =1;
+    private static final int FIRST_ACTIVITY =3;
 
 
     //UX Elements
@@ -69,7 +69,7 @@ public class MyDeckActivity extends Activity  {
     //Read from File
     String fileName = "mydecks.json";
 
-    //My Refrences
+    //My  Global Refrences for detailed Activity on Results Intent
     Deck selectedeck;
     int positionOfItem;
     String name,deckType,deckDesc;
@@ -107,12 +107,13 @@ public class MyDeckActivity extends Activity  {
         lst_decks.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-               /* selectedeck = (Deck) parent.getAdapter().getItem(position);
+                selectedeck = (Deck) parent.getAdapter().getItem(position);
                 Intent intent = new Intent(getApplicationContext(), SealedActivity.class);
                 // Must pass lists of cards so that the app remembers them when moving to new activities.
                 // Create a bundle, since there is two lists of cards being passed in, not a single card.
                 Bundle bundle = new Bundle();
                 // Store card lists.
+                bundle.putInt("deckId",selectedeck.getDeckid());
                 bundle.putParcelableArrayList("openedCardPool", selectedeck.getOpenedCardPool());
                 bundle.putParcelableArrayList("selectedCardPool", selectedeck.getSelectedCardPool());
                 // Put bundle of card lists into intent.
@@ -122,9 +123,61 @@ public class MyDeckActivity extends Activity  {
                 intent.putExtra("cardPoolIntent", true);
 
                 // Start activity with the intent.
-                startActivityForResult(intent,FIRST_ACTIVITY);*/
+                //startActivity(intent);
+                startActivityForResult(intent,FIRST_ACTIVITY);
             }
         });
+    }
+
+    // Store card info so new cards are not generated when the activity is compromised by say, a rotation of the device.
+    @Override
+    protected void onSaveInstanceState(Bundle outState)
+    {
+        super.onSaveInstanceState(outState);
+
+        // Save card info.
+        outState.putParcelableArrayList("openedCardPool", openedCardPool);
+        outState.putParcelableArrayList("selectedCardPool", selectedCardPool);
+
+    }
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        // Load card info.
+        openedCardPool = savedInstanceState.getParcelableArrayList("openedCardPool");
+        selectedCardPool = savedInstanceState.getParcelableArrayList("selectedCardPool");
+
+        loadMyDecks();
+    }
+
+    @Override
+    protected void onPause() {
+        Log.e(TAG,"In onPause()");
+
+        super.onPause();
+    }
+
+    @Override
+    protected void onStop() {
+        Log.e(TAG,"In onStop");
+        super.onStop();
+
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.e(TAG,"In onResume");
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        Log.e(TAG,"In onDestroy");
+        super.onDestroy();
+
     }
 
     @Override
@@ -147,6 +200,11 @@ public class MyDeckActivity extends Activity  {
             readAlldecksFromFile();
             loadMyDecks();
         }
+        else if(requestCode== FIRST_ACTIVITY){
+            if(resultCode==RESULT_OK){
+
+            }
+        }
     }
 
     protected void initialize() {
@@ -159,13 +217,32 @@ public class MyDeckActivity extends Activity  {
             {
                 // Store card pools loaded in from elsewhere.
                 Bundle bundle = intent.getExtras();
+                int deckId;
+                boolean thisDeckExist=true;
+                deckId = bundle.getInt("deckId");
+                if(deckId == 0)
+                {
+                    thisDeckExist=false;
+                }
                 openedCardPool = bundle.getParcelableArrayList("openedCardPool");
                 selectedCardPool = bundle.getParcelableArrayList("selectedCardPool");
 
                 //create a new Deck and add it to the Arrays of deck
-                Deck tempdeck = createDeck(openedCardPool,selectedCardPool);
+                Deck tempdeck = createDeck(deckId,openedCardPool,selectedCardPool);
                 //decks.clear();
-                decks.add(tempdeck);
+                if (thisDeckExist)
+                {
+                    decks.add(tempdeck);
+                }
+                else {
+                    for(int i =0 ; i <decks.size();i++){
+                        Deck deck = decks.get(i);
+                        if(deck.getDeckid() == tempdeck.getDeckid());
+                        {
+                            decks.add(i,tempdeck);
+                        }
+                    }
+                }
 
                 writeToFile();
                 loadMyDecks();
@@ -318,7 +395,7 @@ public class MyDeckActivity extends Activity  {
                 }
 
 
-                Deck deckset = new Deck(Integer.parseInt(deckJSON.getString("deckid")), deckJSON.getString("deckName"), Integer.parseInt(deckJSON.getString("nocards")), deckJSON.getString("decktype"), deckJSON.getString("deckdesc"), selectedCardPool, openedCardPool);
+                Deck deckset = new Deck(Integer.parseInt(deckJSON.getString("deckId")), deckJSON.getString("deckName"), Integer.parseInt(deckJSON.getString("nocards")), deckJSON.getString("decktype"), deckJSON.getString("deckdesc"), selectedCardPool, openedCardPool);
 
                 decks.add(deckset);
 
@@ -328,16 +405,20 @@ public class MyDeckActivity extends Activity  {
         }
     }
 
-    public Deck createDeck(ArrayList<Card> openedCardPool,ArrayList<Card> selectedCardPool){
-        int i;
-        if(decks == null){
-            i =0;
-        }
-        else
+    public Deck createDeck(int id,ArrayList<Card> openedCardPool,ArrayList<Card> selectedCardPool){
+        if(id == 0)
         {
-            i = decks.size()+1;
+            if(decks == null){
+                id = 1;
+            }
+            else
+            {
+                id = decks.size()+1;
+            }
         }
-        Deck tempdeck = new Deck(i,openedCardPool,selectedCardPool);
+
+        Deck tempdeck = new Deck(id, openedCardPool, selectedCardPool);
+
         return tempdeck;
     }
 

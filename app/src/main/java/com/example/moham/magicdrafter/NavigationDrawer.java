@@ -57,7 +57,6 @@ public class NavigationDrawer extends Activity
                 break;
             case 2:
                 Intent i = new Intent(getApplicationContext(), DraftActivity.class);
-
                 startActivity(i);
 
                 break;
