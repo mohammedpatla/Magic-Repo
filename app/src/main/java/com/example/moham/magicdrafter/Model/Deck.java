@@ -48,7 +48,7 @@ public class Deck {
         this.deckid = deckid;
         this.selectedCardPool=selectedCardPool;
         this.openedCardPool =openedCardPool;
-        nocards=0;
+        nocards=selectedCardPool.size();
         decktype="";
         deckName="NewDeck"+Integer.toString(deckid);
         deckdesc="";
@@ -58,7 +58,7 @@ public class Deck {
         this.deckName=deckName;
         this.selectedCardPool=selectedCardPool;
         this.openedCardPool =openedCardPool;
-        nocards=0;
+        nocards=selectedCardPool.size();
         decktype="";
         deckdesc="";
     }
@@ -144,7 +144,7 @@ public class Deck {
     public JSONObject getJSONObject() {
         JSONObject obj = new JSONObject();
         try {
-            obj.put("deckid", deckid);
+            obj.put("deckId", deckid);
             obj.put("deckName", deckName);
             obj.put("nocards", nocards);
             obj.put("decktype", decktype);

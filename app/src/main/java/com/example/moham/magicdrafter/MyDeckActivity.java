@@ -1,8 +1,10 @@
 package com.example.moham.magicdrafter;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.JsonWriter;
@@ -49,6 +51,7 @@ import static android.content.ContentValues.TAG;
 
 Last Modified: 1/3/2018
  */
+
 public class MyDeckActivity extends Activity  {
 
     // Recommended cards in a drafted/sealed deck.
@@ -74,10 +77,19 @@ public class MyDeckActivity extends Activity  {
     int positionOfItem;
     String name,deckType,deckDesc;
 
+    //Total Decks allowed
+    int numberOfDecks;
+    //SharedPrefrence myPrefs;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_deck);
+
+        //Loads total number Of decks from Prefrences
+        SharedPreferences myPrefs = getPreferences(MODE_PRIVATE);
+        numberOfDecks = myPrefs.getInt("numberOfDecks",0);
 
         lst_decks = findViewById(R.id.lst_deck);
 
@@ -123,10 +135,12 @@ public class MyDeckActivity extends Activity  {
                 intent.putExtra("cardPoolIntent", true);
 
                 // Start activity with the intent.
-                //startActivity(intent);
-                startActivityForResult(intent,FIRST_ACTIVITY);
+                startActivity(intent);
+                //startActivityForResult(intent,FIRST_ACTIVITY);
             }
         });
+
+
     }
 
     // Store card info so new cards are not generated when the activity is compromised by say, a rotation of the device.
@@ -203,6 +217,8 @@ public class MyDeckActivity extends Activity  {
         else if(requestCode== FIRST_ACTIVITY){
             if(resultCode==RESULT_OK){
 
+                //Does not reach here For future Activities
+
             }
         }
     }
@@ -228,21 +244,28 @@ public class MyDeckActivity extends Activity  {
                 selectedCardPool = bundle.getParcelableArrayList("selectedCardPool");
 
                 //create a new Deck and add it to the Arrays of deck
-                Deck tempdeck = createDeck(deckId,openedCardPool,selectedCardPool);
+                Deck tempdeck = createDeck(deckId,selectedCardPool,openedCardPool);
                 //decks.clear();
-                if (thisDeckExist)
+                if (!thisDeckExist)
                 {
                     decks.add(tempdeck);
+                    numberOfDecks++;
                 }
                 else {
                     for(int i =0 ; i <decks.size();i++){
                         Deck deck = decks.get(i);
                         if(deck.getDeckid() == tempdeck.getDeckid());
                         {
-                            decks.add(i,tempdeck);
+                            decks.set(i,tempdeck);
                         }
                     }
                 }
+
+                if(decks.size()>5)
+                {
+                    Toast.makeText(this,"Maximum amount of Decks reached",Toast.LENGTH_SHORT).show();
+                }
+
 
                 writeToFile();
                 loadMyDecks();
@@ -269,6 +292,7 @@ public class MyDeckActivity extends Activity  {
         }
         JSONObject obj = new JSONObject();
         try {
+            //obj.put("numberOfDecksEverCreated",numberOfDecksEverCreated);
             obj.put("MyDecks",jsonArray);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -304,6 +328,7 @@ public class MyDeckActivity extends Activity  {
         writer.println(block);
         // Close the PrintWriter, which will also close fos
         writer.close();
+
     }
 
     public  void readAlldecksFromFile(){
@@ -406,16 +431,14 @@ public class MyDeckActivity extends Activity  {
     }
 
     public Deck createDeck(int id,ArrayList<Card> openedCardPool,ArrayList<Card> selectedCardPool){
-        if(id == 0)
-        {
-            if(decks == null){
-                id = 1;
-            }
-            else
-            {
-                id = decks.size()+1;
-            }
-        }
+
+
+        id = 1+numberOfDecks++;
+
+        //Saves Prefrences of total number of Decks
+        SharedPreferences myPrefs = getPreferences(MODE_PRIVATE);
+        SharedPreferences.Editor editor = myPrefs.edit();
+        editor.putInt("numberOfDecks",numberOfDecks).apply();
 
         Deck tempdeck = new Deck(id, openedCardPool, selectedCardPool);
 
