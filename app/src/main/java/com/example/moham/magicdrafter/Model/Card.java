@@ -2,6 +2,12 @@ package com.example.moham.magicdrafter.Model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * Magic Drafter - CardDatabase.java
@@ -185,5 +191,26 @@ public class Card implements Parcelable
         dest.writeString(Character.toString(color));
         dest.writeByte((byte)(foil ? 1: 0));
         dest.writeByte((byte)(flip ? 1: 0));
+    }
+
+
+    //Returning JSON OBJECT to create JSON file
+    //Refrence from https://stackoverflow.com/questions/4841952/convert-arraylistmycustomclass-to-jsonarray?answertab=votes#tab-top
+    //Created By Mohammed Patla 01-4-2018
+    public JSONObject getJSONObject() {
+        JSONObject obj = new JSONObject();
+        try {
+            obj.put("id", id);
+            obj.put("cost", cost);
+            obj.put("rarity", rarity);
+            obj.put("type", type);
+            obj.put("color", color);
+            obj.put("foil", foil);
+            obj.put("flip", flip);
+
+        } catch (JSONException e) {
+            Log.e(TAG, "getJSONObject: DefaultListItem.toString JSONException:",e);
+        }
+        return obj;
     }
 }

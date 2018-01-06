@@ -63,8 +63,12 @@ public class NavigationDrawer extends Activity
                 break;
             case 3:
                 Intent j = new Intent(getApplicationContext(), MyDeckActivity.class);
-
                 startActivity(j);
+                break;
+
+            case 4:
+                Intent l = new Intent(getApplicationContext(), UserPrefrenceActivity.class);
+                startActivity(l);
                 break;
         }
     }
@@ -81,7 +85,10 @@ public class NavigationDrawer extends Activity
                 mTitle = getString(R.string.title_section3);
                 break;
             case 4:
-                mTitle = getString(R.string.title_section3);
+                mTitle = getString(R.string.title_section4);
+                break;
+            case 5:
+                mTitle = getString(R.string.title_section5);
                 break;
         }
     }

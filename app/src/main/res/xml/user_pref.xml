@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="Draft Simulator">
+        <ListPreference
+            android:defaultValue="1"
+            android:dialogTitle="Select Draft Simulator Ais"
+            android:entries="@array/numberof_ais"
+            android:entryValues="@array/numberof_ais_values"
+            android:key="numberofais"
+            android:summary="for draft simulator"
+            android:title="Set Number of AI's"/>
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="nightmode"
+            android:summary="Enables Night Mode"
+            android:title="Enable Dark Theme"/>
+
+    </PreferenceCategory>
+</PreferenceScreen>

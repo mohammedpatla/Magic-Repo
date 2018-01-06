@@ -26,7 +26,7 @@ public class DeckAdapter extends ArrayAdapter<Deck> {
     private Context context;
     private int resource;
 
-    public DeckAdapter(MyDeckActivity context, int resource, ArrayList<Deck> mydecks) {
+    public DeckAdapter(MyDeckActivity context, int resource, List<Deck> mydecks) {
         super(context, resource, mydecks);
 
         this.context = context;
@@ -46,7 +46,7 @@ public class DeckAdapter extends ArrayAdapter<Deck> {
         Deck deck = getItem(position);
 
         TextView txtdeckName = convertView.findViewById(R.id.txt_deckname);
-        txtdeckName.setText(deck.getDeckName().toString());
+        txtdeckName.setText(deck.getDeckName());
 
         TextView txtdecknumber = convertView.findViewById(R.id.txt_decknumberofcards);
         txtdecknumber.setText(Integer.toString(deck.getNocards()));
