@@ -3,7 +3,9 @@ package com.example.moham.magicdrafter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.TextView;
@@ -284,9 +286,24 @@ public class DraftActivity extends SimulatorActivity
     protected void initialCardGeneration()
     {
         // Create an amount of AIs equal to the number chosen in the settings menu.
+
+        // Check preferences for AI number. (If it has been set.)
+        SharedPreferences userPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        String numberOfAis = userPrefs.getString("numAis", "default");
+
+        int numberOfAisInt;
+        if(numberOfAis != "default")
+        {
+            numberOfAisInt = Integer.valueOf(numberOfAis);
+        }
+        else
+        {
+            numberOfAisInt = DEFAULT_NUMBER_OF_AIS;
+        }
+
         // Default = 7. Put these into a list.
         listOfAis = new ArrayList<>();
-        for(int iAi = 0; iAi < DEFAULT_NUMBER_OF_AIS; iAi++)
+        for(int iAi = 0; iAi < numberOfAisInt; iAi++)
         {
             DraftAi newAi = new DraftAi();
             listOfAis.add(newAi);

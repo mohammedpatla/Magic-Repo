@@ -42,6 +42,9 @@ public class AddBasicsActivity extends Activity
     ArrayList<Card> openedCardPool;
     ArrayList<Card> selectedCardPool;
 
+    // Store deckId in case this deck was passed from MyDeckActivity.
+    private int deckId;
+
     // Basic Land type constants. Used to make different basic land objects.
     // Also puts basics at the end when sorted by color.
     public static final int PLAINS = 501;
@@ -98,6 +101,9 @@ public class AddBasicsActivity extends Activity
                 Bundle bundle = intent.getExtras();
                 openedCardPool = bundle.getParcelableArrayList("openedCardPool");
                 selectedCardPool = bundle.getParcelableArrayList("selectedCardPool");
+
+                // Set deckId.
+                deckId = bundle.getInt("deckId");
             }
         }
     }
@@ -206,6 +212,10 @@ public class AddBasicsActivity extends Activity
         // Store card lists.
         bundle.putParcelableArrayList("openedCardPool", openedCardPool);
         bundle.putParcelableArrayList("selectedCardPool", selectedCardPool);
+
+        // Put the deckId into the bundle in case the deck is being sent to MyDeckActivity and originated from it.
+        bundle.putInt("deckId", deckId);
+
         // Put bundle of card lists into intent.
         intent.putExtras(bundle);
 

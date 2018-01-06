@@ -40,6 +40,9 @@ public class SealedActivity extends SimulatorActivity
     Button btnAddBasics;
     Button btnSave;
 
+    // Deck ID. Normally 0. If this is a loaded deck, it will be non-zero, and passed in from MyDeckActivity.
+    private int deckId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -103,6 +106,10 @@ public class SealedActivity extends SimulatorActivity
                 // Store card lists.
                 bundle.putParcelableArrayList("openedCardPool", openedCardPool);
                 bundle.putParcelableArrayList("selectedCardPool", selectedCardPool);
+
+                // Store deck ID. If it is not 0, this activity was opened when a deck was loaded for editing.
+                bundle.putInt("deckId", deckId);
+
                 // Put bundle of card lists into intent.
                 intent.putExtras(bundle);
 
@@ -113,6 +120,9 @@ public class SealedActivity extends SimulatorActivity
                 startActivityForResult(intent, MY_DECK_ACTIVITY);
             }
         });
+
+        // Initialize deck ID to 0. If it is loaded from MyDeckActivity, this number will change.
+        deckId = 0;
     }
 
     @Override
@@ -156,6 +166,10 @@ public class SealedActivity extends SimulatorActivity
         // Store card lists.
         bundle.putParcelableArrayList("openedCardPool", openedCardPool);
         bundle.putParcelableArrayList("selectedCardPool", selectedCardPool);
+
+        // Put deckId into bundle. Keeps it saved for MyDeckActivity in case this deck is a saved deck being edited.
+        bundle.putInt("deckId", deckId);
+
         // Put bundle of card lists into intent.
         intent.putExtras(bundle);
 
@@ -191,6 +205,9 @@ public class SealedActivity extends SimulatorActivity
                 Bundle bundle = intent.getExtras();
                 openedCardPool = bundle.getParcelableArrayList("openedCardPool");
                 selectedCardPool = bundle.getParcelableArrayList("selectedCardPool");
+
+                // Gets the deck ID and stores it in case this was passed from MyDeckActivity.
+                deckId = bundle.getInt("deckId");
 
                 // Update card counter button according to passed in selected card pool (deck).
                 btnCardsInDeck.setText(selectedCardPool.size() + SEALED_DECK_NUM);
