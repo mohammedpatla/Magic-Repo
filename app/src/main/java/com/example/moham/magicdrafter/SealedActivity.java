@@ -120,9 +120,6 @@ public class SealedActivity extends SimulatorActivity
                 startActivityForResult(intent, MY_DECK_ACTIVITY);
             }
         });
-
-        // Initialize deck ID to 0. If it is loaded from MyDeckActivity, this number will change.
-        deckId = 0;
     }
 
     @Override
