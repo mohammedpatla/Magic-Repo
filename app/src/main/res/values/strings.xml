@@ -125,4 +125,10 @@
     <string name="pref_ringtone_silent">Silent</string>
 
     <string name="pref_title_vibrate">Vibrate</string>
+    <string name="welcome_message">Welcome to Magic Drafter! Slide out the menu from the left to
+        begin! Make a deck via the sealed or draft simulators and save them for later viewing. To
+        check on previous decks, go to the My Decks screen. If you\'re looking to change the number
+        of AIs, go to the Settings screen. Happy drafting!    NONE of the cards were created by the
+    makers of this app, and this app has NO connection to Wizards of the Coast. Please support the
+    actual card game if you use this app.</string>
 </resources>
