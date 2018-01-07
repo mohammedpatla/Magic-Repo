@@ -61,6 +61,7 @@ public class MyDeckActivity extends Activity  {
 
     //UX Elements
     ListView lst_decks;
+    Button btn_new;
 
     //Array of Data
     ArrayList<Deck> decks = new ArrayList<Deck>();
@@ -92,6 +93,10 @@ public class MyDeckActivity extends Activity  {
         numberOfDecks = myPrefs.getInt("numberOfDecks",0);
 
         lst_decks = findViewById(R.id.lst_deck);
+        btn_new= findViewById(R.id.btn_createdeck);
+
+        //disabled new button
+        btn_new.setClickable(false);
 
         readAlldecksFromFile();
         loadMyDecks();
