@@ -55,7 +55,6 @@ Last Modified: 1/3/2018
 public class MyDeckActivity extends Activity  {
 
     // Recommended cards in a drafted/sealed deck.
-    private static final String SEALED_DECK_NUM = "/40";
     private static final int SECOND_ACTIVITY =2;
     private static final int FIRST_ACTIVITY =3;
 
@@ -77,9 +76,10 @@ public class MyDeckActivity extends Activity  {
     int positionOfItem;
     String name,deckType,deckDesc;
 
+    //Change in future update
+    //A Relative value of decks stored as a refrence for Deck IDs
     //Total Decks allowed
     int numberOfDecks;
-    //SharedPrefrence myPrefs;
 
 
     @Override
@@ -96,7 +96,6 @@ public class MyDeckActivity extends Activity  {
         readAlldecksFromFile();
         loadMyDecks();
         initialize();
-        //loadMyDecks(findViewById(R.layout.activity_my_deck));
 
         lst_decks.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
@@ -136,7 +135,6 @@ public class MyDeckActivity extends Activity  {
 
                 // Start activity with the intent.
                 startActivity(intent);
-                //startActivityForResult(intent,FIRST_ACTIVITY);
             }
         });
 
@@ -149,6 +147,7 @@ public class MyDeckActivity extends Activity  {
     {
         super.onSaveInstanceState(outState);
 
+        //unused for now maybe future updates
         // Save card info.
         outState.putParcelableArrayList("openedCardPool", openedCardPool);
         outState.putParcelableArrayList("selectedCardPool", selectedCardPool);
@@ -158,6 +157,7 @@ public class MyDeckActivity extends Activity  {
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
 
+        //unused for now maybe future updates
         // Load card info.
         openedCardPool = savedInstanceState.getParcelableArrayList("openedCardPool");
         selectedCardPool = savedInstanceState.getParcelableArrayList("selectedCardPool");
@@ -217,6 +217,7 @@ public class MyDeckActivity extends Activity  {
         else if(requestCode== FIRST_ACTIVITY){
             if(resultCode==RESULT_OK){
 
+                //For future updates planned
                 //Does not reach here For future Activities
 
             }
@@ -236,6 +237,8 @@ public class MyDeckActivity extends Activity  {
                 int deckId;
                 boolean thisDeckExist=true;
                 deckId = bundle.getInt("deckId");
+
+                //check if a new deck or a already existing deck
                 if(deckId == 0)
                 {
                     thisDeckExist=false;
@@ -263,7 +266,6 @@ public class MyDeckActivity extends Activity  {
                     else {
                         decks.add(tempdeck);
                     }
-                    //numberOfDecks++;
                 }
                 else {
                     for(int i =0 ; i <decks.size();i++){
@@ -294,6 +296,7 @@ public class MyDeckActivity extends Activity  {
         }
     }
 
+    //write to JSON file internally
     public  void writeToFile(){
         //get refrence to apps resources
         Resources res = getResources();
@@ -305,7 +308,6 @@ public class MyDeckActivity extends Activity  {
         }
         JSONObject obj = new JSONObject();
         try {
-            //obj.put("numberOfDecksEverCreated",numberOfDecksEverCreated);
             obj.put("MyDecks",jsonArray);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -323,7 +325,7 @@ public class MyDeckActivity extends Activity  {
             Log.e(TAG, "initialize: File Not Found Exception",e);
         }
 
-        // Here we are concanitaing alll data into a string
+        // Here we are concanitaing all data into a string
         String block = null;
         try {
             block = obj.getString("MyDecks");
@@ -344,6 +346,7 @@ public class MyDeckActivity extends Activity  {
 
     }
 
+    //reading deck from files
     public  void readAlldecksFromFile(){
         // declare input stream and files we'll use
         FileInputStream fis;

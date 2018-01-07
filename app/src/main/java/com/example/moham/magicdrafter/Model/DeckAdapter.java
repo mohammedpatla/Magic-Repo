@@ -51,6 +51,9 @@ public class DeckAdapter extends ArrayAdapter<Deck> {
         TextView txtdecknumber = convertView.findViewById(R.id.txt_decknumberofcards);
         txtdecknumber.setText(Integer.toString(deck.getNocards()));
 
+        TextView txtdesc = convertView.findViewById(R.id.txt_desc);
+        txtdesc.setText(deck.getDeckdesc());
+
         return convertView;
     }
 }
