@@ -10,6 +10,7 @@ import android.widget.EditText;
 public class MyDeckDetailedActivity extends Activity {
 
     Button btnSave;
+    Button btnDelete;
     EditText edtName;
     EditText edtdeckType;
     EditText edtdeckDescription;
@@ -25,9 +26,13 @@ public class MyDeckDetailedActivity extends Activity {
         setContentView(R.layout.activity_my_deck_detailed);
 
         btnSave = findViewById(R.id.btn_save);
+        btnDelete = findViewById(R.id.btn_Delete);
         edtName = findViewById(R.id.edtxt_name);
         edtdeckType = findViewById(R.id.edtxt_deckType);
         edtdeckDescription = findViewById(R.id.edtxt_deckDescription);
+
+        // Furure functionality
+        btnDelete.setClickable(false);
 
         Intent i = getIntent();
         name = i.getStringExtra("name");

@@ -11,58 +11,50 @@
         android:id="@+id/edtxt_name"
         android:layout_width="334dp"
         android:layout_height="48dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginEnd="464dp"
         android:ems="10"
         android:hint="Enter Name of Deck"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+        tools:layout_editor_absoluteY="27dp" />
 
     <EditText
         android:id="@+id/edtxt_deckType"
         android:layout_width="371dp"
         android:layout_height="54dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginEnd="340dp"
         android:ems="10"
         android:hint="Deck Type"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+        tools:layout_editor_absoluteY="102dp" />
 
     <EditText
         android:id="@+id/edtxt_deckDescription"
         android:layout_width="322dp"
         android:layout_height="43dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="396dp"
         android:ems="10"
         android:hint="Deck Discription"
         android:inputType="textPersonName"
+        app:layout_constraintBottom_toTopOf="@+id/btn_save"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView5" />
+        app:layout_constraintTop_toTopOf="@+id/textView5"
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/btn_save"
         android:layout_width="128dp"
         android:layout_height="43dp"
-        android:layout_marginBottom="120dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginBottom="168dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="84dp"
         android:text="Save"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edtxt_deckDescription"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.11"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/textView3"
@@ -70,11 +62,11 @@
         android:layout_height="31dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="36dp"
         android:text="Name of Deck"
         android:textAppearance="@android:style/TextAppearance.Holo.Large"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.046"
+        app:layout_constraintEnd_toStartOf="@+id/edtxt_name"
+        app:layout_constraintHorizontal_bias="0.412"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -84,10 +76,10 @@
         android:layout_height="24dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="56dp"
         android:text="Deck Type"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.066"
+        app:layout_constraintEnd_toStartOf="@+id/edtxt_deckType"
+        app:layout_constraintHorizontal_bias="0.36"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edtxt_name" />
 
@@ -96,11 +88,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="72dp"
         android:text="Deck Description"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.027"
+        app:layout_constraintEnd_toStartOf="@+id/edtxt_deckDescription"
+        app:layout_constraintHorizontal_bias="0.412"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edtxt_deckType" />
 
@@ -108,13 +100,14 @@
         android:id="@+id/btn_Delete"
         android:layout_width="121dp"
         android:layout_height="42dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="32dp"
+        android:layout_marginEnd="140dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="Delete"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.356"
         app:layout_constraintStart_toEndOf="@+id/btn_save"
         app:layout_constraintTop_toTopOf="@+id/btn_save"
         app:layout_constraintVertical_bias="0.0" />

@@ -239,6 +239,14 @@ public class MyDeckActivity extends Activity  {
                 if(deckId == 0)
                 {
                     thisDeckExist=false;
+
+                    //reinitialize deckID
+                    deckId = 1+numberOfDecks++;
+
+                    //Saves Prefrences of total number of Decks
+                    SharedPreferences myPrefs = getPreferences(MODE_PRIVATE);
+                    SharedPreferences.Editor editor = myPrefs.edit();
+                    editor.putInt("numberOfDecks",numberOfDecks).apply();
                 }
                 openedCardPool = bundle.getParcelableArrayList("openedCardPool");
                 selectedCardPool = bundle.getParcelableArrayList("selectedCardPool");
@@ -248,23 +256,28 @@ public class MyDeckActivity extends Activity  {
                 //decks.clear();
                 if (!thisDeckExist)
                 {
-                    decks.add(tempdeck);
-                    numberOfDecks++;
+                    if(decks.size() >= 5)
+                    {
+                        Toast.makeText(this,"Maximum amount of Decks reached",Toast.LENGTH_LONG).show();
+                    }
+                    else {
+                        decks.add(tempdeck);
+                    }
+                    //numberOfDecks++;
                 }
                 else {
                     for(int i =0 ; i <decks.size();i++){
                         Deck deck = decks.get(i);
-                        if(deck.getDeckid() == tempdeck.getDeckid());
+                        if(deck.getDeckid() == tempdeck.getDeckid())
                         {
                             decks.set(i,tempdeck);
+                        }
+                        else{
+
                         }
                     }
                 }
 
-                if(decks.size()>5)
-                {
-                    Toast.makeText(this,"Maximum amount of Decks reached",Toast.LENGTH_SHORT).show();
-                }
 
 
                 writeToFile();
@@ -431,14 +444,6 @@ public class MyDeckActivity extends Activity  {
     }
 
     public Deck createDeck(int id,ArrayList<Card> openedCardPool,ArrayList<Card> selectedCardPool){
-
-
-        id = 1+numberOfDecks++;
-
-        //Saves Prefrences of total number of Decks
-        SharedPreferences myPrefs = getPreferences(MODE_PRIVATE);
-        SharedPreferences.Editor editor = myPrefs.edit();
-        editor.putInt("numberOfDecks",numberOfDecks).apply();
 
         Deck tempdeck = new Deck(id, openedCardPool, selectedCardPool);
 
