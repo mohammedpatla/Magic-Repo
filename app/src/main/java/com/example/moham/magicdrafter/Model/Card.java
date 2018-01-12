@@ -38,13 +38,15 @@ public class Card implements Parcelable
     private boolean foil;
     // Whether the card has a back-side to it or not.
     private boolean flip;
+    // What set this card is from.
+    private String set;
 
     // Basic Land type constants for making basic lands.
     private static final char LANDRARITYCOLOR = 'C';
     private static final char LANDTYPE = 'L';
 
     // Initializes passed in card from the original full set pool.
-    public Card (int id, int cost, char rarity, char type, char color, boolean flip)
+    public Card (int id, int cost, char rarity, char type, char color, boolean flip, String set)
     {
         this.id = id;
         this.cost = cost;
@@ -52,6 +54,7 @@ public class Card implements Parcelable
         this.color = color;
         this.type = type;
         this.flip = flip;
+        this.set = set;
         foil = false;
     }
 
@@ -63,6 +66,7 @@ public class Card implements Parcelable
         rarity = type = color = ' ';
         foil = false;
         flip = false;
+        set = "";
 
     }
 
@@ -76,6 +80,7 @@ public class Card implements Parcelable
         color = in.readString().charAt(0);
         foil = in.readByte() != 0;
         flip = in.readByte() != 0;
+        set = in.readString();
     }
 
     // Creating a basic land Card.
@@ -156,6 +161,14 @@ public class Card implements Parcelable
         foil = true;
     }
 
+    public void setSet(String set) {
+        this.set = set;
+    }
+
+    public String getSet() {
+        return set;
+    }
+
     // Used for Parcelable in order to move Card lists around the app.
     public static final Creator<Card> CREATOR = new Creator<Card>()
     {
@@ -191,6 +204,7 @@ public class Card implements Parcelable
         dest.writeString(Character.toString(color));
         dest.writeByte((byte)(foil ? 1: 0));
         dest.writeByte((byte)(flip ? 1: 0));
+        dest.writeString(set);
     }
 
 
@@ -207,6 +221,7 @@ public class Card implements Parcelable
             obj.put("color", color);
             obj.put("foil", foil);
             obj.put("flip", flip);
+            obj.put("set", set);
 
         } catch (JSONException e) {
             Log.e(TAG, "getJSONObject: DefaultListItem.toString JSONException:",e);

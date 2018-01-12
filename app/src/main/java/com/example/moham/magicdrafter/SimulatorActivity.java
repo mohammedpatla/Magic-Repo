@@ -28,7 +28,7 @@ import java.util.Collections;
     This abstract Activity class will be inherited from by SealedActivity and DraftActivity.
     The two activities share a lot of code for viewing and adding/removing cards from pools.
     Shared code will be placed here so that differences are clearly in their respective classes.
-    Modified: 1/4/2018
+    Modified: 1/11/2018
  */
 
 public abstract class SimulatorActivity extends Activity
@@ -43,9 +43,17 @@ public abstract class SimulatorActivity extends Activity
 
     // Used for file name finding when getting high resolution card images for Image dialog.
     public static final String IXALAN_HIGH_RES_CARD_IMAGES = "ixahigh";
+    public static final String RIX_HIGH_RES_CARD_IMAGES = "rixhigh";
 
     // Used for file name finding when getting the flip side of an expanded card.
     public static final String FLIP_SIDE = "_2";
+
+    // Constants for the card set tables. To be passed into CardDatabase.
+    // Also, the constants are used for set selection.
+    // The table for the set called "Ixalan".
+    public static final String IXALAN_CARD_TABLE = "IxalanSet";
+    // The table for the set called "Rivals of Ixalan".
+    public static final String RIX_CARD_TABLE = "RIXSet";
 
     // Views of Activity.
     GridView grdCardView;
@@ -142,7 +150,7 @@ public abstract class SimulatorActivity extends Activity
                 {
                     dialogCard = selectedCardPool.get(position);
                 }
-                String cardImageFileName = IXALAN_HIGH_RES_CARD_IMAGES + dialogCard.getId();
+                String cardImageFileName = getCardSet(dialogCard) + dialogCard.getId();
 
                 // Set the card's image. Use IXALAN_HIGH_RES_CARD_IMAGES for the higher resolution images.
                 cardDialogImage.setImageResource(getResources().getIdentifier(cardImageFileName, "drawable", getPackageName()));
@@ -235,6 +243,21 @@ public abstract class SimulatorActivity extends Activity
                 ((CardAdapter)grdCardView.getAdapter()).notifyDataSetChanged();
             }
         });
+    }
+
+    // Finds the high res file name for a card's set and returns it.
+    public String getCardSet(Card card)
+    {
+        switch (card.getSet())
+        {
+            case IXALAN_CARD_TABLE:
+                return IXALAN_HIGH_RES_CARD_IMAGES;
+            case RIX_CARD_TABLE:
+                return RIX_HIGH_RES_CARD_IMAGES;
+            default:
+                // ERROR!
+                return IXALAN_HIGH_RES_CARD_IMAGES;
+        }
     }
 
     // Store card info so new cards are not generated when the activity is compromised by say, a rotation of the device.

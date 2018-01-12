@@ -37,7 +37,7 @@ pack’s contents that are shown before the remaining cards are passed to one of
    passed from an AI.) Eventually the cards will run out and a new pack will be opened again. This will occur 3 times with
    a total of 3 packs. Afterwords, the pool of selected cards will be stored in an intent and be passed over to
    the SealedActivity for deck building and eventual saving.
-Last Modified: 1/4/2018
+Last Modified: 1/11/2018
  */
 
 public class DraftActivity extends SimulatorActivity
@@ -63,6 +63,9 @@ public class DraftActivity extends SimulatorActivity
 
     // The list of DraftAis, populated at the start of a draft.
     ArrayList<DraftAi> listOfAis;
+
+    // Chosen sets to be drafted.
+    private ArrayList<String> setsForDraft;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -140,19 +143,21 @@ public class DraftActivity extends SimulatorActivity
     // This method is called if new cards need to be generated. (A new drafting round starts after each pack is completely drafted.)
     private void generateRoundOfPacks()
     {
-        // Database of cards and their appropriate images... This is all built-in and pre-created in the assets folder.
-        // Retrieve information from database and create the card pool to draw cards from.
-        CardDatabase cardDb = new CardDatabase(this);
-        // Store card pool here.
-        ArrayList<Card> cardPool;
+        // Initialize a selectedCardPool that is empty, for the user to move cards into when desired.
+        // (Only do this if the pool doesn't exist yet.)
+        if(selectedCardPool == null)
+        {
+            selectedCardPool = new ArrayList<>();
 
-        cardPool = cardDb.getCardPool();
+            // Also set which card sets are being drafted from.
+            setsForDraft = new ArrayList<>();
+            setsForDraft.add(RIX_CARD_TABLE);
+            setsForDraft.add(RIX_CARD_TABLE);
+            setsForDraft.add(IXALAN_CARD_TABLE);
+        }
 
-        // Make a card pack generator. This will use the cardPool passed in to make the packs that will be opened.
-        CardPackGenerator packGenerator = new CardPackGenerator(cardPool);
-
-        // This is a single pack of the Draft being simulated, so open 1 pack.
-        openedCardPool = packGenerator.generatePacks(DRAFT_PACK);
+        // Get a pack for the player and get the card pack generator back to use on the AIs.
+        CardPackGenerator packGenerator = drawPackFromSet();
 
         // Update display and pack number if there is a display.
         if(txtPackNum != null)
@@ -162,18 +167,38 @@ public class DraftActivity extends SimulatorActivity
             txtPackNum.setText(packNumString);
         }
 
-        // Initialize a selectedCardPool that is empty, for the user to move cards into when desired.
-        // (Only do this if the pool doesn't exist yet.)
-        if(selectedCardPool == null)
-        {
-            selectedCardPool = new ArrayList<>();
-        }
-
         // Generate a pack for each AI in listOfAis.
         for(int iAi = 0; iAi < listOfAis.size(); iAi++)
         {
             listOfAis.get(iAi).setOpenedCardPool(packGenerator.generatePacks(DRAFT_PACK));
         }
+    }
+
+    // Draws a pack from the next set being drafted from, puts into user's pool. Then passes cardGenerator out to caller.
+    private CardPackGenerator drawPackFromSet()
+    {
+        // Database of cards and their appropriate images... This is all built-in and pre-created in the assets folder.
+        // Retrieve information from database and create the card pool to draw cards from.
+        CardDatabase cardDb = new CardDatabase(this);
+
+        // Store card pool here.
+        ArrayList<Card> setPool;
+        setPool = cardDb.getCardPool(setsForDraft.get(0));
+
+        // Remove set from setPool.
+        if (setPool.size() > 0)
+        {
+            setsForDraft.remove(0);
+        }
+
+        // Make a card pack generator. This will use the cardPool passed in to make the packs that will be opened.
+        CardPackGenerator packGenerator = new CardPackGenerator(setPool);
+
+        // This is a single pack of the Draft being simulated, so open 1 pack.
+        openedCardPool = packGenerator.generatePacks(DRAFT_PACK);
+
+        // Return the cardPackGenerator to be used by the AIs.
+        return packGenerator;
     }
 
     // This method gets the AIs to each select one card from their pools.

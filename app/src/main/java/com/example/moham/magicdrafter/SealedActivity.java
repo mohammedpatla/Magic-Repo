@@ -21,7 +21,7 @@ were randomly selected. Users will be able to switch between what cards are in t
 and will be able to sort cards as they build their typically, forty card deck. ‘Basic Land’ cards will be able to be added to the deck via a
 button along the top of the screen. (These are cards that normally can be added to a deck whenever one wishes.) When finished, they will be
 able to save the deck to view later on the load previous decks screen."
-Last Modified: 1/4/2018
+Last Modified: 1/11/2018
  */
 
 public class SealedActivity extends SimulatorActivity
@@ -35,6 +35,12 @@ public class SealedActivity extends SimulatorActivity
 
     // Number of packs in the sealed format.
     public static final int SEALED_PACKS = 6;
+    public static final int MINOR_SEALED = 2;
+    public static final int MAJOR_SEALED = 4;
+
+    // Sizes for setsForDraft list. Checked to see how a draft will be done.
+    public static final int TWO_DRAFT_SETS = 2;
+    public static final int ONE_DRAFT_SET = 1;
 
     // Views of Activity.
     Button btnAddBasics;
@@ -42,6 +48,10 @@ public class SealedActivity extends SimulatorActivity
 
     // Deck ID. Normally 0. If this is a loaded deck, it will be non-zero, and passed in from MyDeckActivity.
     private int deckId;
+
+    // Contains list of sets to be drafted from for this sealed run.
+    // If 1 set, draw six packs of that. If 2 sets, draw 2 packs of second set, 4 of first.
+    private ArrayList<String> setsForDraft;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -134,22 +144,56 @@ public class SealedActivity extends SimulatorActivity
     // This method is called if new cards need to be generated. If cards are passed in via Intent, this is not needed.
     private void generateNewCards()
     {
+        // Set the card sets to be drafted from.
+        setsForDraft = new ArrayList<>();
+        setsForDraft.add(RIX_CARD_TABLE);
+        setsForDraft.add(IXALAN_CARD_TABLE);
+
+        // Generates sealed pool and places in openedCardPool.
+        drawPacksFromSets();
+
+        // Initialize a selectedCardPool that is empty, for the user to move cards into when desired.
+        selectedCardPool = new ArrayList<>();
+    }
+
+    // Generates six packs from selected card sets and puts them into the openedCardPool.
+    private void drawPacksFromSets()
+    {
         // Database of cards and their appropriate images... This is all built-in and pre-created in the assets folder.
         // Retrieve information from database and create the card pool to draw cards from.
         CardDatabase cardDb = new CardDatabase(this);
         // Store card pool here.
         ArrayList<Card> cardPool;
 
-        cardPool = cardDb.getCardPool();
+        if (setsForDraft.size() == ONE_DRAFT_SET)
+        {
+            cardPool = cardDb.getCardPool(setsForDraft.get(0));
+            // Make a card pack generator. This will use the cardPool passed in to make the packs that will be opened.
+            CardPackGenerator packGenerator = new CardPackGenerator(cardPool);
 
-        // Make a card pack generator. This will use the cardPool passed in to make the packs that will be opened.
-        CardPackGenerator packGenerator = new CardPackGenerator(cardPool);
+            // Since this is a Sealed simulator, open 6 (SEALED_PACKS) packs.
+            openedCardPool = packGenerator.generatePacks(SEALED_PACKS);
+        }
+        else if(setsForDraft.size() == TWO_DRAFT_SETS)
+        {
+            // Two sets are being drafted. First set is major one, second is minor one.
+            cardPool = cardDb.getCardPool(setsForDraft.get(0));
+            // Make a card pack generator. This will use the cardPool passed in to make the packs that will be opened.
+            CardPackGenerator packGenerator = new CardPackGenerator(cardPool);
+            // Major set opening.
+            openedCardPool = packGenerator.generatePacks(MAJOR_SEALED);
 
-        // Since this is a Sealed simulator, open 6 (SEALED_PACKS) packs.
-        openedCardPool = packGenerator.generatePacks(SEALED_PACKS);
-
-        // Initialize a selectedCardPool that is empty, for the user to move cards into when desired.
-        selectedCardPool = new ArrayList<>();
+            // Fetch minor set's cards.
+            cardPool = cardDb.getCardPool(setsForDraft.get(1));
+            // Make appropriate card pack generator.
+            packGenerator = new CardPackGenerator(cardPool);
+            // Minor set opening. Add to opened pool.
+            openedCardPool.addAll(packGenerator.generatePacks(MINOR_SEALED));
+        }
+        else
+        {
+            // ERROR!
+        }
     }
 
     // Open basic land adding activity, where user selects lands to add to their deck. Using intents, data will be transferred between activities regarding current cards in the opened and selected pools.

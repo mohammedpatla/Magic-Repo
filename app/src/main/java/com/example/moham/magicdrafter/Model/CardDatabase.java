@@ -10,7 +10,7 @@ import java.util.ArrayList;
  * Magic Drafter - CardDatabase.java
  * Created by Brigham Moll.
  * Created on 12/25/2017.
- * Last Revised on 12/26/2017.
+ * Last Revised on 1/11/2018.
  * Description: This class is used to access data from the database in order to generate card packs randomly
  * from the Magic: The Gathering set being used. This is done with the help of the extended CardDataBaseHelper.
  */
@@ -20,10 +20,6 @@ public class CardDatabase
     // Instances for accessing  pre-built card database.
     private SQLiteDatabase database;
     private CardDataBaseHelper openHelper;
-
-    // Constants for the table.
-    // The table for the set called "Ixalan".
-    private static final String IXALAN_CARD_TABLE = "IxalanSet";
 
     // Fields of card info.
     private static final int ID_COLUMN = 0;
@@ -44,7 +40,7 @@ public class CardDatabase
     }
 
     // Using getCardPool(), retrieve an array of all possible cards in the set. Later, generated cards will be copied from this pool of cards.
-    public ArrayList<Card> getCardPool()
+    public ArrayList<Card> getCardPool(String cardSet)
     {
         // Create the ArrayList that will hold the cards in the set.
         ArrayList<Card> cardsPool = new ArrayList<>();
@@ -53,7 +49,7 @@ public class CardDatabase
         database = openHelper.getReadableDatabase();
 
         // Get all records from the cards pool table. Ordered by the _id. (Collector's number)
-        Cursor result = database.query(IXALAN_CARD_TABLE, null, null, null, null, null, "_id");
+        Cursor result = database.query(cardSet, null, null, null, null, null, "_id");
 
         // Loop through cursor to get all Cards into the ArrayList.
         while(result.moveToNext())
@@ -69,7 +65,7 @@ public class CardDatabase
             boolean flip = result.getInt(FLIP_COLUMN) != 0;
 
             // With all information gathered for this card entry, make the card and add it to the Array.
-            cardsPool.add(new Card(id, cost, rarity, type, color, flip));
+            cardsPool.add(new Card(id, cost, rarity, type, color, flip, cardSet));
         }
 
         // Close database in CardDataBaseHelper.

@@ -28,8 +28,15 @@ public class CardAdapter extends BaseAdapter
     // Width of a card is about 67% of its height.
     private static final int ITEM_WIDTH = (int)(0.67*ITEM_HEIGHT);
 
-    // Use this to find image files in the Ixalan set of low resolution.
+    // Use these to find image files in low resolution.
     private static final String IXALAN_LOW_RES_IMAGES = "ixa";
+    private static final String RIX_LOW_RES_IMAGES = "rix";
+
+    // Used to find which set a card is from and link it to a low res file name.
+    // The table for the set called "Ixalan".
+    public static final String IXALAN_CARD_TABLE = "IxalanSet";
+    // The table for the set called "Rivals of Ixalan".
+    public static final String RIX_CARD_TABLE = "RIXSet";
 
     // Context is required to make an ImageView, so store a reference to it when Adapter is made.
     private Context context;
@@ -82,10 +89,9 @@ public class CardAdapter extends BaseAdapter
 
         // Loading full-size Bitmaps takes up an abundance of memory, leading to OOM.
         // Calculate and use smaller resolution versions of images.
-
-
+        Card card = openedCardPool.get(position);
         // Find the card in the list of opened cards that correlates with the specific card being displayed, and use it's id to find its file name in the resources.
-        String cardImageFileName = IXALAN_LOW_RES_IMAGES + openedCardPool.get(position).getId();
+        String cardImageFileName = findCardSet(card) + card.getId();
         // Set the image of the item in the GridView to this card's image.
         cardView.setImageResource(context.getResources().getIdentifier(cardImageFileName, "drawable", context.getPackageName()));
         return cardView;
@@ -95,5 +101,20 @@ public class CardAdapter extends BaseAdapter
     public void changeCardList(ArrayList<Card> newOpenedCardPool)
     {
         openedCardPool = newOpenedCardPool;
+    }
+
+    // Find the set of a card, return its appropriate low res file name.
+    private String findCardSet(Card card)
+    {
+        switch(card.getSet())
+        {
+            case IXALAN_CARD_TABLE:
+                return IXALAN_LOW_RES_IMAGES;
+            case RIX_CARD_TABLE:
+                return RIX_LOW_RES_IMAGES;
+            default:
+                // ERROR!
+                return IXALAN_LOW_RES_IMAGES;
+        }
     }
 }

@@ -8,7 +8,7 @@ import java.util.Random;
  * Magic Drafter - CardPackGenerator.java
  * Created by Brigham Moll.
  * Created on 12/25/2017.
- * Last Revised on 1/1/2018.
+ * Last Revised on 1/11/2018.
  * Description: This class will generate card packs using the cardPool retrieved from the database of cards
  * in the set being drafted/opened. It will return these card pack pools to the activity as a single array, so they can be
  * displayed to the user.
@@ -174,6 +174,7 @@ public class CardPackGenerator
             generatedCard.setRarity(cardToBeGenerated.getRarity());
             generatedCard.setColor(cardToBeGenerated.getColor());
             generatedCard.setFlip(cardToBeGenerated.getFlip());
+            generatedCard.setSet(cardToBeGenerated.getSet());
         }
         // Return card that was generated!
         return generatedCard;
