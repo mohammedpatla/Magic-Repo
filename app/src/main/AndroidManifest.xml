@@ -27,7 +27,6 @@
             android:parentActivityName=".NavigationDrawer" />
         <activity
             android:name=".NavigationDrawer" />
-        <activity android:name=".Main2Activity" />
         <activity
             android:name=".MyDeckActivity"
             android:parentActivityName=".NavigationDrawer" />

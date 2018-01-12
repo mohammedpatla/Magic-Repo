@@ -229,6 +229,7 @@ public class MyDeckActivity extends Activity  {
         }
     }
 
+    //Code start after initializing View
     protected void initialize() {
 
         // Check for Intent with possibly loaded card pools in it from another Activity.
