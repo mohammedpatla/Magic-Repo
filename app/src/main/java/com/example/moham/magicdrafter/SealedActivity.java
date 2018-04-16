@@ -146,8 +146,7 @@ public class SealedActivity extends SimulatorActivity
     {
         // Set the card sets to be drafted from.
         setsForDraft = new ArrayList<>();
-        setsForDraft.add(RIX_CARD_TABLE);
-        setsForDraft.add(IXALAN_CARD_TABLE);
+        setsForDraft.add(DOM_CARD_TABLE);
 
         // Generates sealed pool and places in openedCardPool.
         drawPacksFromSets();

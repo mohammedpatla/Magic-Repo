@@ -44,6 +44,7 @@ public abstract class SimulatorActivity extends Activity
     // Used for file name finding when getting high resolution card images for Image dialog.
     public static final String IXALAN_HIGH_RES_CARD_IMAGES = "ixahigh";
     public static final String RIX_HIGH_RES_CARD_IMAGES = "rixhigh";
+    public static final String DOM_HIGH_RES_CARD_IMAGES = "domhigh";
 
     // Used for file name finding when getting the flip side of an expanded card.
     public static final String FLIP_SIDE = "_2";
@@ -54,6 +55,8 @@ public abstract class SimulatorActivity extends Activity
     public static final String IXALAN_CARD_TABLE = "IxalanSet";
     // The table for the set called "Rivals of Ixalan".
     public static final String RIX_CARD_TABLE = "RIXSet";
+    // The table for the set called "Dominaria".
+    public static final String DOM_CARD_TABLE = "DOMSet";
 
     // Views of Activity.
     GridView grdCardView;
@@ -254,6 +257,8 @@ public abstract class SimulatorActivity extends Activity
                 return IXALAN_HIGH_RES_CARD_IMAGES;
             case RIX_CARD_TABLE:
                 return RIX_HIGH_RES_CARD_IMAGES;
+            case DOM_CARD_TABLE:
+                return DOM_HIGH_RES_CARD_IMAGES;
             default:
                 // ERROR!
                 return IXALAN_HIGH_RES_CARD_IMAGES;
@@ -396,7 +401,7 @@ public abstract class SimulatorActivity extends Activity
             if(!expandedCardFlipped)
             {
                 // If not, change the art to the flip side of it.
-                String cardImageFileName = IXALAN_HIGH_RES_CARD_IMAGES + expandedCard.getId() + FLIP_SIDE;
+                String cardImageFileName = getCardSet(expandedCard) + expandedCard.getId() + FLIP_SIDE;
                 cardDialogImage.setImageResource(getResources().getIdentifier(cardImageFileName, "drawable", getPackageName()));
                 // Set expandedCardFlipped to true.
                 expandedCardFlipped = true;
