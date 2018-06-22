@@ -13,7 +13,7 @@ import java.util.ArrayList;
  * Title of Project - Title of Script
  * Created by Brigham Moll.
  * Created on 12/26/2017.
- * Last Revised on 1/4/2018.
+ * Last Revised on 5/29/2018.
  * Description: This class extends BaseAdapter. It is used to display cards from a pool of cards on the screen
  * as GridView items. Each item has a picture of the card that has been drawn from a pack. Cards can be selected
  * for a deck, or removed from one, when the user taps on an item. If they press down and hold on the item,

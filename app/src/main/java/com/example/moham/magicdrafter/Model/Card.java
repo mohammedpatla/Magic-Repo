@@ -92,6 +92,8 @@ public class Card implements Parcelable
         type = LANDTYPE;
         foil = false;
         flip = false;
+        color = 'C';
+        set = "IxalanSet";
     }
 
     // Getters and setters.

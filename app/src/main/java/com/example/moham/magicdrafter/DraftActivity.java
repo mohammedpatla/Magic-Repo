@@ -151,9 +151,9 @@ public class DraftActivity extends SimulatorActivity
 
             // Also set which card sets are being drafted from.
             setsForDraft = new ArrayList<>();
-            setsForDraft.add(RIX_CARD_TABLE);
-            setsForDraft.add(RIX_CARD_TABLE);
-            setsForDraft.add(IXALAN_CARD_TABLE);
+            setsForDraft.add(DOM_CARD_TABLE);
+            setsForDraft.add(DOM_CARD_TABLE);
+            setsForDraft.add(DOM_CARD_TABLE);
         }
 
         // Get a pack for the player and get the card pack generator back to use on the AIs.
