@@ -45,6 +45,7 @@ public abstract class SimulatorActivity extends Activity
     public static final String IXALAN_HIGH_RES_CARD_IMAGES = "ixahigh";
     public static final String RIX_HIGH_RES_CARD_IMAGES = "rixhigh";
     public static final String DOM_HIGH_RES_CARD_IMAGES = "domhigh";
+    public static final String M19_HIGH_RES_CARD_IMAGES = "m19high";
 
     // Used for file name finding when getting the flip side of an expanded card.
     public static final String FLIP_SIDE = "_2";
@@ -57,6 +58,8 @@ public abstract class SimulatorActivity extends Activity
     public static final String RIX_CARD_TABLE = "RIXSet";
     // The table for the set called "Dominaria".
     public static final String DOM_CARD_TABLE = "DOMSet";
+    // The table for the set called "M19".
+    public static final String M19_CARD_TABLE = "M19Set";
 
     // Views of Activity.
     GridView grdCardView;
@@ -259,6 +262,8 @@ public abstract class SimulatorActivity extends Activity
                 return RIX_HIGH_RES_CARD_IMAGES;
             case DOM_CARD_TABLE:
                 return DOM_HIGH_RES_CARD_IMAGES;
+            case M19_CARD_TABLE:
+                return M19_HIGH_RES_CARD_IMAGES;
             default:
                 // ERROR!
                 return IXALAN_HIGH_RES_CARD_IMAGES;

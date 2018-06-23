@@ -32,6 +32,7 @@ public class CardAdapter extends BaseAdapter
     private static final String IXALAN_LOW_RES_IMAGES = "ixa";
     private static final String RIX_LOW_RES_IMAGES = "rix";
     private static final String DOM_LOW_RES_IMAGES = "dom";
+    private static final String M19_LOW_RES_IMAGES = "m19";
 
     // Used to find which set a card is from and link it to a low res file name.
     // The table for the set called "Ixalan".
@@ -40,6 +41,8 @@ public class CardAdapter extends BaseAdapter
     public static final String RIX_CARD_TABLE = "RIXSet";
     // The table for the set called "Dominaria".
     public static final String DOM_CARD_TABLE = "DOMSet";
+    // The table for the set called "M19".
+    public static final String M19_CARD_TABLE = "M19Set";
 
     // Context is required to make an ImageView, so store a reference to it when Adapter is made.
     private Context context;
@@ -117,6 +120,8 @@ public class CardAdapter extends BaseAdapter
                 return RIX_LOW_RES_IMAGES;
             case DOM_CARD_TABLE:
                 return DOM_LOW_RES_IMAGES;
+            case M19_CARD_TABLE:
+                return M19_LOW_RES_IMAGES;
             default:
                 // ERROR!
                 return IXALAN_LOW_RES_IMAGES;
